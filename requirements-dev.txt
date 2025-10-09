@@ -1,24 +1,94 @@
-# Development dependencies
+# ============================================
+# Base Production Dependencies
+# ============================================
 -r requirements.txt
 
-# Code Quality
-black>=23.12.0
-flake8>=7.0.0
-mypy>=1.8.0
-isort>=5.13.0
+# ============================================
+# Code Quality & Formatting
+# ============================================
+black>=23.12.0                   # Python code formatter
+flake8>=7.0.0                    # Linting and style guide enforcement
+mypy>=1.8.0                      # Static type checking
+isort>=5.13.0                    # Import statement sorting
+pylint>=3.0.0                    # Advanced code analysis
+autopep8>=2.0.4                  # PEP 8 auto-formatting
+bandit>=1.7.6                    # Security vulnerability scanning
 
-# Testing
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-pytest-cov>=4.1.0
-pytest-mock>=3.12.0
-coverage>=7.4.0
+# ============================================
+# Testing Frameworks
+# ============================================
+pytest>=7.4.0                    # Main testing framework
+pytest-asyncio>=0.21.0           # Async test support
+pytest-cov>=4.1.0                # Code coverage reporting
+pytest-mock>=3.12.0              # Mocking utilities
+pytest-xdist>=3.5.0              # Parallel test execution
+coverage>=7.4.0                  # Coverage analysis
+hypothesis>=6.98.0               # Property-based testing
 
+# ============================================
+# AWS Service Mocking
+# ============================================
+moto[all]>=5.0.0                 # Mock AWS services (S3, Bedrock, SageMaker, Neptune)
+localstack>=3.1.0                # Local AWS cloud stack (alternative to moto)
+
+# ============================================
+# Test Data & Fixtures
+# ============================================
+faker>=22.0.0                    # Generate realistic test data
+factory-boy>=3.3.0               # Test object factories
+mimesis>=13.0.0                  # Additional fake data generation
+
+# ============================================
+# Type Stubs & Annotations
+# ============================================
+types-requests>=2.31.0           # Type hints for requests library
+types-PyYAML>=6.0.12             # Type hints for YAML
+boto3-stubs[bedrock-runtime,s3,sagemaker,neptune,lambda]>=1.34.0  # AWS service type hints
+
+# ============================================
+# API Testing
+# ============================================
+httpx>=0.26.0                    # Async HTTP testing client
+respx>=0.20.2                    # Mock HTTPX requests
+pytest-httpx>=0.30.0             # HTTPX pytest integration
+
+# ============================================
+# Performance Testing
+# ============================================
+locust>=2.20.0                   # Load testing framework
+pytest-benchmark>=4.0.0          # Benchmark test functions
+
+# ============================================
 # Documentation
-mkdocs>=1.5.3
-mkdocs-material>=9.5.0
+# ============================================
+mkdocs>=1.5.3                    # Documentation site generator
+mkdocs-material>=9.5.0           # Material theme for MkDocs
+mkdocstrings[python]>=0.24.0     # Auto-generate docs from docstrings
+pdoc>=14.3.0                     # Alternative API documentation
 
-# Type Stubs
-types-requests>=2.31.0
-boto3-stubs[bedrock,neptune,sagemaker,s3]>=1.34.0
+# ============================================
+# Debugging & Profiling
+# ============================================
+ipython>=8.20.0                  # Enhanced Python REPL
+ipdb>=0.13.13                    # IPython debugger
+line-profiler>=4.1.1             # Line-by-line profiling
+memory-profiler>=0.61.0          # Memory usage profiling
+py-spy>=0.3.14                   # Sampling profiler
+
+# ============================================
+# Pre-commit Hooks
+# ============================================
+pre-commit>=3.6.0                # Git pre-commit hook framework
+
+# ============================================
+# Database & Migration Tools (if needed)
+# ============================================
+alembic>=1.13.1                  # Database migrations (if using RDS alongside Neptune)
+
+# ============================================
+# Environment Management
+# ============================================
+python-dotenv>=1.0.0             # Already in main requirements
+invoke>=2.2.0                    # Task execution tool
+
 

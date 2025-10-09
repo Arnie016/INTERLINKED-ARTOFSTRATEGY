@@ -212,17 +212,20 @@ Frontend shows: Red nodes on graph + chat recommendations
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **LLM Reasoning** | Amazon Bedrock (Claude 3, Nova) |
-| **Agent Framework** | Amazon Bedrock AgentCore |
-| **Graph Database** | Amazon Neptune (openCypher) |
-| **Fine-tuning** | Amazon SageMaker Training Jobs |
-| **Inference** | SageMaker Real-time Endpoints |
-| **Data Storage** | Amazon S3 |
-| **Frontend** | React, Next.js, Flourish, D3.js |
-| **Hosting** | AWS Amplify |
-| **APIs** | FastAPI/Lambda + API Gateway |
+| Layer | Technology | SDK/Package |
+|-------|-----------|-------------|
+| **LLM Reasoning** | Amazon Bedrock (Claude 3, Nova) | `anthropic`, `boto3`, `langchain-aws` |
+| **Agent Framework** | Amazon Bedrock AgentCore | `boto3-stubs[bedrock-runtime]` |
+| **Graph Database** | Amazon Neptune (openCypher) | `gremlinpython`, `rdflib`, `SPARQLWrapper` |
+| **Graph Analytics** | NetworkX | `networkx`, `py2neo` |
+| **Fine-tuning** | Amazon SageMaker Training Jobs | `sagemaker>=2.200.0` |
+| **Inference** | SageMaker Real-time Endpoints | `boto3.client('sagemaker-runtime')` |
+| **Data Storage** | Amazon S3 | `boto3-stubs[s3]`, `s3fs` |
+| **Frontend** | React, Next.js, D3.js | `@aws-sdk/client-*`, `react-force-graph` |
+| **Hosting** | AWS Amplify | `aws-amplify`, `@aws-amplify/ui-react` |
+| **APIs** | FastAPI + Uvicorn | `fastapi>=0.109.0`, `uvicorn[standard]` |
+
+📦 **[Complete SDK Mapping](./SDK_MAPPING.md)** - Detailed breakdown of all dependencies and usage examples
 
 ---
 

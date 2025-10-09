@@ -1,34 +1,99 @@
-# AWS SDK
-boto3>=1.34.0
-botocore>=1.34.0
+# ============================================
+# AWS SDK - Core Services
+# ============================================
+boto3>=1.34.0                    # AWS SDK for Python (S3, Lambda, IAM)
+botocore>=1.34.0                 # Low-level AWS service client library
+aioboto3>=12.3.0                 # Async AWS SDK for high-performance operations
 
-# Amazon Bedrock
-anthropic>=0.18.0
+# ============================================
+# Amazon Bedrock - LLM & Agent Runtime
+# ============================================
+anthropic>=0.18.0                # Claude 3/Opus LLM client
+boto3-stubs[bedrock-runtime]>=1.34.0  # Type hints for Bedrock
+langchain>=0.1.0                 # LLM orchestration framework
+langchain-aws>=0.1.0             # AWS-specific LangChain integrations
 
-# Amazon Neptune
-gremlinpython>=3.7.0
-rdflib>=7.0.0
+# ============================================
+# Amazon Neptune - Graph Database
+# ============================================
+gremlinpython>=3.7.0             # Gremlin query language client for Neptune
+rdflib>=7.0.0                    # SPARQL query support
+SPARQLWrapper>=2.0.0             # SPARQL endpoint wrapper
+networkx>=3.2.0                  # Graph analytics and algorithms
+py2neo>=2021.2.3                 # Alternative graph database client
 
-# Web Framework
-fastapi>=0.109.0
-uvicorn[standard]>=0.27.0
-pydantic>=2.5.0
+# ============================================
+# Amazon SageMaker - Model Training & Inference
+# ============================================
+sagemaker>=2.200.0               # SageMaker Python SDK for training/deployment
+boto3-stubs[sagemaker]>=1.34.0   # Type hints for SageMaker
 
-# Data Processing
-pandas>=2.1.0
-numpy>=1.26.0
+# ============================================
+# Amazon S3 - Data Storage
+# ============================================
+boto3-stubs[s3]>=1.34.0          # Type hints for S3
+s3fs>=2024.2.0                   # S3 filesystem interface
 
-# Utilities
-python-dotenv>=1.0.0
-requests>=2.31.0
-pyyaml>=6.0.1
+# ============================================
+# Web Framework & API
+# ============================================
+fastapi>=0.109.0                 # Modern async web framework
+uvicorn[standard]>=0.27.0        # ASGI server with performance extras
+pydantic>=2.5.0                  # Data validation and serialization
+pydantic-settings>=2.1.0         # Settings management
+python-multipart>=0.0.6          # File upload support
+websockets>=12.0                 # WebSocket support for real-time updates
 
-# Logging
-structlog>=24.1.0
+# ============================================
+# Data Processing & Analysis
+# ============================================
+pandas>=2.1.0                    # Data manipulation and CSV processing
+numpy>=1.26.0                    # Numerical computing
+pyarrow>=15.0.0                  # Parquet file support
+openpyxl>=3.1.0                  # Excel file support
 
-# Testing (dev dependencies - move to requirements-dev.txt in production)
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-pytest-cov>=4.1.0
-httpx>=0.26.0
+# ============================================
+# Graph Visualization Data Export
+# ============================================
+json-schema>=4.21.0              # JSON schema validation
+networkx>=3.2.0                  # Graph structure for export to frontend
+
+# ============================================
+# Authentication & Security
+# ============================================
+python-jose[cryptography]>=3.3.0 # JWT token handling
+passlib[bcrypt]>=1.7.4           # Password hashing
+cryptography>=42.0.0             # Encryption utilities
+
+# ============================================
+# Utilities & Configuration
+# ============================================
+python-dotenv>=1.0.0             # Environment variable management
+requests>=2.31.0                 # HTTP client library
+pyyaml>=6.0.1                    # YAML configuration files
+click>=8.1.0                     # CLI tool creation
+
+# ============================================
+# Logging & Monitoring
+# ============================================
+structlog>=24.1.0                # Structured logging
+python-json-logger>=2.0.7        # JSON log formatting
+sentry-sdk[fastapi]>=1.40.0      # Error tracking (optional)
+
+# ============================================
+# Async & Performance
+# ============================================
+asyncio>=3.4.3                   # Async I/O support
+aiohttp>=3.9.0                   # Async HTTP client
+uvloop>=0.19.0                   # Fast asyncio event loop (Unix only)
+
+# ============================================
+# Development & Testing
+# ============================================
+pytest>=7.4.0                    # Testing framework
+pytest-asyncio>=0.21.0           # Async test support
+pytest-cov>=4.1.0                # Code coverage
+httpx>=0.26.0                    # Async HTTP testing client
+faker>=22.0.0                    # Test data generation
+moto[all]>=5.0.0                 # Mock AWS services for testing
 
