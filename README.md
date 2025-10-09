@@ -91,6 +91,16 @@
 
 ## 🧩 System Components
 
+### Agent Roles at a Glance
+
+| Agent | Primary Job | Input | Output | Analogy |
+|-------|------------|-------|--------|---------|
+| **Extractor** | Convert text → graph | Raw text, CSV | JSON triples | 📝 Data entry clerk who organizes information |
+| **Analyzer** | Find problems in graph | Neptune graph data | List of inefficiencies | 🔍 Detective who finds patterns and issues |
+| **Strategizer** | Create action plans | Problem descriptions | Strategic recommendations | 💡 Business consultant who suggests solutions |
+
+---
+
 ### 1️⃣ **Extractor Agent** (Amazon Bedrock)
 
 **Purpose:** Converts unstructured text into structured knowledge graph entities.
@@ -167,7 +177,9 @@
 
 ---
 
-## 🔄 Data Flow
+## 🔄 Data Flow & Reasoning Pipeline
+
+### High-Level Flow
 
 1. **Data Ingestion** → Upload company text/CSV to **S3**
 2. **Extraction** → Extractor Agent parses text → structured triples
@@ -175,6 +187,26 @@
 4. **Analysis** → Analyzer Agent queries Neptune for patterns
 5. **Strategy** → Strategizer Agent generates recommendations
 6. **Visualization** → Frontend displays chat insights + graph updates
+
+### 🧠 The Reasoning Loop (What Makes This Intelligent)
+
+```
+Neptune Graph (Source of Truth)
+         ↓
+Analyzer queries: "Find bottlenecks"
+         ↓
+Structured results: [Process X, Person Y]
+         ↓
+Bedrock LLM interprets: "X blocks 3 processes, Y is overloaded"
+         ↓
+Impact scoring: High priority (0.87)
+         ↓
+Strategizer generates: "Automate X, reassign Y's tasks"
+         ↓
+Frontend shows: Red nodes on graph + chat recommendations
+```
+
+**Key Innovation:** AI doesn't just read text — it **queries the organizational structure** and **reasons over relationships**.
 
 ---
 
@@ -284,17 +316,202 @@ Visit `http://localhost:3000` to access the UI.
 
 ---
 
-## 🧠 Why Neptune?
+## 🧠 How Graph Reasoning Works (The Core Innovation)
 
-**Without Neptune, agents can't reason over structure.**
+### Why Neptune + Bedrock Together?
 
-LLMs like Bedrock are excellent at text processing but don't inherently understand entity relationships. Neptune provides:
+**Traditional AI Problem:** LLMs can read text but can't inherently understand *structural relationships* between entities.
 
-✅ **Source of Truth** - Persistent storage of all organizational entities  
-✅ **Queryable Memory** - Efficient pattern matching (centrality, dependencies)  
-✅ **Context Store** - Structured data for AI reasoning  
+**Our Solution:** Combine Neptune's graph database with Bedrock's reasoning to enable AI agents that think through organizational structure, not just text.
 
-**Result:** Real reasoning, not just text summarization.
+---
+
+### 🧩 Step-by-Step: Graph Reasoning in Action
+
+| Stage | What Happens | Tools Used | Example |
+|-------|-------------|------------|---------|
+| **1️⃣ Graph Storage** | Company data stored as nodes (people/processes) and edges (relationships) | **Amazon Neptune** | `(Alice)-[:PERFORMS]->(Review Reports)`<br>`(Review Reports)-[:DEPENDS_ON]->(Finance Approval)` |
+| **2️⃣ Query Formulation** | Analyzer formulates structured graph queries | **Bedrock AgentCore + Neptune SDK** | "Find processes that have no assigned person" |
+| **3️⃣ Structured Results** | Neptune returns matching nodes/edges | **Neptune Query Engine** | `["Finance Approval", "QA Testing"]` |
+| **4️⃣ LLM Reasoning** | Bedrock interprets results and infers inefficiencies | **Bedrock (Claude 3/Nova)** | "Finance Approval has no owner, causing delays in 3 downstream processes" |
+| **5️⃣ Scoring** | Agent ranks issues by impact and priority | **Bedrock reasoning + Graph metrics** | "High priority: affects 3 downstream processes" |
+| **6️⃣ Strategy Output** | Insights sent to Strategizer for recommendations | **JSON via Lambda/FastAPI** | `{"inefficiency": "unassigned", "impact_score": 0.87}` |
+
+---
+
+### 📊 Concrete Example: Finding Bottlenecks
+
+**Scenario:** Your organization has this structure:
+
+```
+Alice → Review Reports → Finance Approval → Send Invoice
+Bob   → Approve Budget → Finance Approval
+```
+
+#### Query 1: Find Unassigned Processes
+
+```cypher
+MATCH (p:Process)
+WHERE NOT (p)<-[:PERFORMS]-(:Person)
+RETURN p.name;
+```
+
+**Neptune Returns:** `["Finance Approval"]`
+
+**Analyzer LLM Reasoning:**
+> "Finance Approval is unassigned but is depended on by 2 upstream processes (Review Reports, Approve Budget). This creates a critical bottleneck affecting invoice delivery."
+
+---
+
+#### Query 2: Find Overloaded Team Members
+
+```cypher
+MATCH (p:Person)-[:PERFORMS]->(t:Process)
+WITH p, count(t) AS taskCount
+WHERE taskCount > 3
+RETURN p.name, taskCount
+ORDER BY taskCount DESC;
+```
+
+**Neptune Returns:** 
+```json
+[
+  {"name": "Alice", "taskCount": 4},
+  {"name": "Bob", "taskCount": 2}
+]
+```
+
+**Analyzer LLM Reasoning:**
+> "Alice manages 4 processes, exceeding optimal workload capacity. Risk of burnout and delays. Consider task redistribution."
+
+---
+
+#### Query 3: Detect Circular Dependencies
+
+```cypher
+MATCH path = (d1:Department)-[:DEPENDS_ON*]->(d1)
+RETURN path;
+```
+
+**Neptune Returns:** `Finance → HR → Legal → Finance`
+
+**Analyzer LLM Reasoning:**
+> "Circular dependency detected in approval chain. Finance waits on HR, HR on Legal, Legal on Finance. This creates an unresolvable deadlock."
+
+---
+
+### 🎯 Output to Strategizer
+
+The Analyzer packages insights:
+
+```json
+{
+  "inefficiencies": [
+    {
+      "type": "unassigned_process",
+      "entity": "Finance Approval",
+      "impact_score": 0.87,
+      "affected_processes": 3,
+      "recommendation_needed": true
+    },
+    {
+      "type": "overload",
+      "entity": "Alice",
+      "task_count": 4,
+      "impact_score": 0.72,
+      "recommendation_needed": true
+    }
+  ]
+}
+```
+
+**Strategizer Agent Response** (from fine-tuned SageMaker model):
+
+```json
+{
+  "recommendations": [
+    {
+      "issue": "Finance Approval unassigned",
+      "action": "Assign to Finance Ops Lead (Sarah)",
+      "implementation": "Update RACI matrix, set up approval Slackbot for <$5K requests",
+      "expected_impact": "Reduce approval time by 60%",
+      "priority": "high"
+    },
+    {
+      "issue": "Alice overloaded",
+      "action": "Automate report compilation",
+      "implementation": "Deploy Python script to auto-generate weekly reports",
+      "expected_impact": "Free up 8 hours/week",
+      "priority": "medium"
+    }
+  ]
+}
+```
+
+---
+
+### 🔄 How Bedrock AgentCore Enables This
+
+AgentCore allows the Analyzer to use **reasoning tools** modularly:
+
+```python
+# Analyzer Agent Configuration
+agent_tools = [
+    {
+        "name": "query_neptune",
+        "description": "Execute graph queries to find patterns",
+        "handler": lambda query: neptune_client.execute(query)
+    },
+    {
+        "name": "compute_centrality",
+        "description": "Calculate node importance metrics",
+        "handler": graph_analytics.betweenness_centrality
+    },
+    {
+        "name": "rank_inefficiencies",
+        "description": "Score issues by business impact",
+        "handler": impact_scorer.calculate
+    }
+]
+
+# Agent Reasoning Flow
+if query_result := agent.query_neptune("find_unassigned"):
+    impact = agent.compute_centrality(query_result)
+    ranked = agent.rank_inefficiencies(impact)
+    return agent.generate_insights(ranked)
+```
+
+Each step is **transparent and traceable** — you can see exactly which queries were run and how the AI reasoned through the results.
+
+---
+
+### ⚡ Why This Approach Is Powerful
+
+| Traditional AI Approach | Graph Reasoning (OrgMind AI) |
+|------------------------|------------------------------|
+| 📝 Reads text, guesses relationships | 🎯 **Knows exact dependencies** from graph structure |
+| ❓ Hard to trace reasoning logic | ✅ **Transparent queries** + explicit reasoning steps |
+| 🌐 Generic responses | 🔍 **Targeted insights** tied to org structure |
+| 🔄 No persistent context | 💾 **Graph acts as memory** across sessions |
+| 📊 One-shot answers | 🔄 **Continuous reasoning** over evolving org graph |
+
+**Key Insight:** You're giving AI a *map of the organization*, not just words — enabling logical reasoning through structure.
+
+---
+
+### 🧮 Real-World Impact
+
+**Before OrgMind AI:**
+- "I think Finance might be a bottleneck, but I'm not sure..."
+- Manual org chart analysis takes weeks
+- Inefficiencies hidden in silos
+
+**After OrgMind AI:**
+- "Finance Approval is unassigned and blocks 3 critical processes"
+- Automated analysis in minutes
+- AI suggests specific, actionable fixes
+
+The graph enables **precision** where traditional AI only offers **probability**.
 
 ---
 
