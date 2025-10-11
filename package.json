@@ -1,0 +1,29 @@
+{
+  "name": "interlinked-artofstrategy",
+  "version": "1.0.0",
+  "description": "Neo4j connection and graph operations for Interlinked Art of Strategy project",
+  "main": "neo4j-connect.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/neo4j-connect.js",
+    "dev": "ts-node neo4j-connect.ts",
+    "test": "ts-node neo4j-connect.ts"
+  },
+  "dependencies": {
+    "neo4j-driver": "^5.15.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.0"
+  },
+  "keywords": [
+    "neo4j",
+    "graph-database",
+    "typescript",
+    "strategy"
+  ],
+  "author": "Interlinked Team",
+  "license": "MIT"
+}

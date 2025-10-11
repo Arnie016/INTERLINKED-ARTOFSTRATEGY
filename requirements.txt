@@ -14,13 +14,17 @@ langchain>=0.1.0                 # LLM orchestration framework
 langchain-aws>=0.1.0             # AWS-specific LangChain integrations
 
 # ============================================
-# Amazon Neptune - Graph Database
+# Graph Databases - Neptune & Neo4j
 # ============================================
+# Amazon Neptune
 gremlinpython>=3.7.0             # Gremlin query language client for Neptune
 rdflib>=7.0.0                    # SPARQL query support
 SPARQLWrapper>=2.0.0             # SPARQL endpoint wrapper
 networkx>=3.2.0                  # Graph analytics and algorithms
 py2neo>=2021.2.3                 # Alternative graph database client
+
+# Neo4j Aura
+neo4j>=5.14.0                    # Official Neo4j Python driver for Aura instances
 
 # ============================================
 # Amazon SageMaker - Model Training & Inference

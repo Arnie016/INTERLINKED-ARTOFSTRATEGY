@@ -84,3 +84,5 @@ data/
 *.parquet
 *.json.gz
 
+.env
+books
