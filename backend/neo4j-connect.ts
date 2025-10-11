@@ -241,12 +241,6 @@ async function main(): Promise<void> {
   console.log('='.repeat(80));
   console.log('✅ Connection test complete!');
   console.log('='.repeat(80));
-  console.log();
-  console.log('💡 Next Steps:');
-  console.log('   - Your Neo4j instance is ready');
-  console.log('   - Connection test successful');
-  console.log('   - Ready for data operations');
-  console.log();
 }
 
 // Run the main function
