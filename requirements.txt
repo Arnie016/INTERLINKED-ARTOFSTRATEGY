@@ -25,6 +25,7 @@ py2neo>=2021.2.3                 # Alternative graph database client
 
 # Neo4j Aura
 neo4j>=5.14.0                    # Official Neo4j Python driver for Aura instances
+neo4j-driver>=5.14.0             # Neo4j driver with advanced connection features
 
 # ============================================
 # Amazon SageMaker - Model Training & Inference
@@ -59,7 +60,7 @@ openpyxl>=3.1.0                  # Excel file support
 # ============================================
 # Graph Visualization Data Export
 # ============================================
-json-schema>=4.21.0              # JSON schema validation
+jsonschema>=4.21.0              # JSON schema validation
 networkx>=3.2.0                  # Graph structure for export to frontend
 
 # ============================================

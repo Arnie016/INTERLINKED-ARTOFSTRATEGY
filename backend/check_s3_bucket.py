@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-AWS S3 Bucket Content Checker
+AWS S3 Bucket Folder Counter
 
-This script verifies AWS credentials and lists the contents of a specified S3 bucket.
+This script verifies AWS credentials and counts the number of folders and their contents in a specified S3 bucket.
 """
 
 import boto3
@@ -47,68 +47,72 @@ def check_aws_credentials():
         return None
 
 
-def list_s3_bucket_contents(bucket_name, max_keys=1000):
+def count_s3_bucket_folders(bucket_name, max_keys=1000):
     """
-    List all objects in the specified S3 bucket.
+    Count folders and their contents in the specified S3 bucket.
     
     Args:
         bucket_name (str): Name of the S3 bucket (without s3:// prefix)
         max_keys (int): Maximum number of objects to retrieve per request
     
     Returns:
-        list: List of objects in the bucket
+        dict: Dictionary with folder counts and statistics
     """
     try:
         s3_client = boto3.client('s3')
         
-        print(f"📦 Listing contents of s3://{bucket_name}/")
+        print(f"📦 Counting folders and contents in s3://{bucket_name}/")
         print("=" * 80)
         
         # Use paginator to handle buckets with many objects
         paginator = s3_client.get_paginator('list_objects_v2')
         pages = paginator.paginate(Bucket=bucket_name, PaginationConfig={'MaxItems': max_keys})
         
-        objects = []
-        total_size = 0
-        folder_structure = {}
+        folder_counts = {}
+        total_objects = 0
+        root_files = 0
         
         for page in pages:
             if 'Contents' not in page:
                 print("   (Empty bucket or no objects found)")
-                return []
+                return {"folders": 0, "total_objects": 0, "root_files": 0, "folder_details": {}}
             
             for obj in page['Contents']:
-                objects.append(obj)
-                total_size += obj['Size']
-                
-                # Extract folder structure
+                total_objects += 1
                 key = obj['Key']
+                
+                # Check if it's a root-level file or in a folder
                 if '/' in key:
+                    # Extract folder path
                     folder = '/'.join(key.split('/')[:-1])
-                    folder_structure[folder] = folder_structure.get(folder, 0) + 1
+                    folder_counts[folder] = folder_counts.get(folder, 0) + 1
+                else:
+                    # Root-level file
+                    root_files += 1
         
         # Display summary
-        print(f"\n📊 Summary:")
-        print(f"   Total Objects: {len(objects)}")
-        print(f"   Total Size:    {format_size(total_size)}")
+        print(f"\n📊 Bucket Summary:")
+        print(f"   Total Objects: {total_objects}")
+        print(f"   Root Files:    {root_files}")
+        print(f"   Folders:       {len(folder_counts)}")
         
-        if folder_structure:
-            print(f"\n📁 Folder Structure:")
-            for folder, count in sorted(folder_structure.items()):
-                print(f"   {folder}/ ({count} files)")
+        if folder_counts:
+            print(f"\n📁 Folder Contents:")
+            print(f"{'Folder':<40} {'Files'}")
+            print("-" * 50)
+            
+            # Sort folders by file count (descending)
+            sorted_folders = sorted(folder_counts.items(), key=lambda x: x[1], reverse=True)
+            
+            for folder, count in sorted_folders:
+                print(f"{folder:<40} {count}")
         
-        # Display objects
-        print(f"\n📄 Objects:")
-        print(f"{'Size':<12} {'Last Modified':<25} {'Key'}")
-        print("-" * 80)
-        
-        for obj in sorted(objects, key=lambda x: x['Key']):
-            size_str = format_size(obj['Size'])
-            modified = obj['LastModified'].strftime('%Y-%m-%d %H:%M:%S')
-            key = obj['Key']
-            print(f"{size_str:<12} {modified:<25} {key}")
-        
-        return objects
+        return {
+            "folders": len(folder_counts),
+            "total_objects": total_objects,
+            "root_files": root_files,
+            "folder_details": folder_counts
+        }
         
     except ClientError as e:
         error_code = e.response['Error']['Code']
@@ -148,7 +152,7 @@ def format_size(bytes_size):
 def main():
     """Main execution function."""
     print("=" * 80)
-    print("AWS S3 Bucket Content Checker")
+    print("AWS S3 Bucket Folder Counter")
     print("=" * 80)
     print()
     
@@ -157,11 +161,11 @@ def main():
     if not identity:
         sys.exit(1)
     
-    # Step 2: List S3 bucket contents
+    # Step 2: Count S3 bucket folders and contents
     bucket_name = "hackathon-book-store"
-    objects = list_s3_bucket_contents(bucket_name)
+    folder_stats = count_s3_bucket_folders(bucket_name)
     
-    if objects is None:
+    if folder_stats is None:
         sys.exit(1)
     
     print()
