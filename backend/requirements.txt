@@ -12,6 +12,7 @@ neo4j>=5.15.0
 # Environment and utilities
 python-dotenv>=1.0.0
 pydantic>=2.5.0
+Faker>=22.0.0  # For realistic mock data generation
 
 # Web framework
 fastapi>=0.109.0

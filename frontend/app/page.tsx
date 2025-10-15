@@ -28,6 +28,7 @@ export default function HomePage() {
   const [isConnected, setIsConnected] = useState(false)
   const [neo4jStatus, setNeo4jStatus] = useState<string>("unknown")
   const [companyName, setCompanyName] = useState<string>("")
+  const [companySize, setCompanySize] = useState<string>("medium")
   const [isGeneratingData, setIsGeneratingData] = useState(false)
 
   // Check API connection on mount
@@ -118,7 +119,7 @@ export default function HomePage() {
     try {
       console.log('Generating sample data for company:', companyName)
       
-      // Call the backend to generate sample data
+      // Call the backend to generate comprehensive sample data
       const response = await fetch('http://localhost:8000/api/generate-sample-data', {
         method: 'POST',
         headers: {
@@ -126,9 +127,8 @@ export default function HomePage() {
         },
         body: JSON.stringify({
           company_name: companyName,
-          departments: 5,
-          people_per_department: 8,
-          processes_per_department: 3
+          company_size: companySize,
+          generate_files: true
         })
       })
 
@@ -252,6 +252,15 @@ export default function HomePage() {
                     placeholder="Company name..."
                     className="px-3 py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   />
+                  <select
+                    value={companySize}
+                    onChange={(e) => setCompanySize(e.target.value)}
+                    className="px-3 py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+                  >
+                    <option value="small">Small (10-50)</option>
+                    <option value="medium">Medium (50-200)</option>
+                    <option value="large">Large (200-1000)</option>
+                  </select>
                   <button
                     onClick={generateSampleData}
                     disabled={!companyName.trim() || isGeneratingData}

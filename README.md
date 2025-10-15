@@ -32,6 +32,7 @@
 - 🧠 **Intelligent Analysis** - Detects bottlenecks, gaps, and inefficiencies using AI reasoning
 - 💡 **Strategic Recommendations** - Generates actionable business improvement strategies
 - 🎨 **Visual Interface** - Interactive chat + graph visualization
+- 🎲 **Mock Data Generation** - Generate realistic organizational data (10-1000 employees) for testing and demos
 
 ---
 

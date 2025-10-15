@@ -63,9 +63,8 @@ class AgentInfo(BaseModel):
 
 class SampleDataRequest(BaseModel):
     company_name: str
-    departments: int = 5
-    people_per_department: int = 8
-    processes_per_department: int = 3
+    company_size: str = "medium"  # small, medium, large
+    generate_files: bool = True  # Whether to save files to disk
 
 class SampleDataResponse(BaseModel):
     success: bool
@@ -215,14 +214,27 @@ async def get_graph_data():
 
 @app.post("/api/generate-sample-data", response_model=SampleDataResponse)
 async def generate_sample_data(request: SampleDataRequest):
-    """Generate sample organizational data for a company."""
+    """Generate comprehensive organizational data for a company using the mock data generator."""
     try:
-        # Get the extractor agent for data generation
+        from tools.mock_generation import generate_mock_data
+        
+        # Validate company size
+        if request.company_size not in ["small", "medium", "large"]:
+            return SampleDataResponse(
+                success=False,
+                message=f"Invalid company size: {request.company_size}. Must be 'small', 'medium', or 'large'.",
+                data_generated={}
+            )
+        
+        # Get the admin agent for clearing data (has reset_graph permission)
+        admin_agent = orchestrator.get_agent("admin")
+        
+        # Get the extractor agent for data insertion
         agent = orchestrator.get_agent("extractor")
         
-        # First, clear existing data
+        # First, clear existing data using admin agent
         print(f"Clearing existing data for {request.company_name}...")
-        clear_result = agent.execute_tool("reset_graph", {"confirm": True})
+        clear_result = admin_agent.execute_tool("reset_graph", {"confirm": True})
         
         if not clear_result.get("success"):
             return SampleDataResponse(
@@ -231,103 +243,231 @@ async def generate_sample_data(request: SampleDataRequest):
                 data_generated={}
             )
         
-        # Generate sample data using the agent
-        print(f"Generating sample data for {request.company_name}...")
+        # Generate comprehensive mock data
+        print(f"Generating comprehensive organizational data for {request.company_name} ({request.company_size})...")
         
-        # Create departments
-        departments = []
-        for i in range(request.departments):
-            dept_name = f"{request.company_name} Department {i+1}"
+        # Always generate files (or pass None for default directory)
+        result = generate_mock_data(request.company_name, request.company_size, None)
+        
+        if not result.get("success"):
+            return SampleDataResponse(
+                success=False,
+                message="Failed to generate mock data",
+                data_generated={}
+            )
+        
+        data = result["data"]
+        
+        # Insert data into Neo4j
+        print("Inserting data into Neo4j...")
+        
+        # Insert departments
+        dept_nodes = {}
+        for dept in data["departments"]:
             dept_result = agent.execute_tool("add_node", {
                 "node_type": "Department",
                 "properties": {
-                    "name": dept_name,
-                    "company": request.company_name,
-                    "department_id": f"dept_{i+1}",
-                    "budget": 100000 + (i * 50000),
-                    "headcount": request.people_per_department
+                    "name": dept["name"],
+                    "description": dept.get("description", ""),
+                    "budget": dept.get("budget", 0),
+                    "head": dept.get("head", ""),
+                    "location": dept.get("location", ""),
+                    "size": dept.get("headcount", 0),
+                    "status": dept.get("status", "active")
                 }
             })
             if dept_result.get("success"):
-                departments.append(dept_result.get("node"))
+                dept_nodes[dept["name"]] = dept_result.get("node")
         
-        # Create people for each department
-        people = []
-        for dept_idx, dept in enumerate(departments):
-            for person_idx in range(request.people_per_department):
-                person_name = f"Person {person_idx+1} from {dept['name']}"
-                person_result = agent.execute_tool("add_node", {
-                    "node_type": "Person",
-                    "properties": {
-                        "name": person_name,
-                        "email": f"person{person_idx+1}.dept{dept_idx+1}@{request.company_name.lower().replace(' ', '')}.com",
-                        "role": f"Role {person_idx+1}",
-                        "department": dept['name'],
-                        "employee_id": f"emp_{dept_idx+1}_{person_idx+1}",
-                        "salary": 50000 + (person_idx * 10000)
-                    }
-                })
-                if person_result.get("success"):
-                    people.append(person_result.get("node"))
-                    
-                    # Create relationship between person and department
-                    agent.execute_tool("add_relationship", {
-                        "from_node": person_result.get("node"),
-                        "to_node": dept,
-                        "relationship_type": "WORKS_IN",
-                        "properties": {"since": "2024-01-01"}
-                    })
+        print(f"✓ Inserted {len(dept_nodes)} departments into Neo4j")
         
-        # Create processes for each department
-        processes = []
-        for dept_idx, dept in enumerate(departments):
-            for process_idx in range(request.processes_per_department):
-                process_name = f"Process {process_idx+1} in {dept['name']}"
-                process_result = agent.execute_tool("add_node", {
-                    "node_type": "Process",
-                    "properties": {
-                        "name": process_name,
-                        "department": dept['name'],
-                        "process_id": f"proc_{dept_idx+1}_{process_idx+1}",
-                        "status": "active",
-                        "priority": "medium"
-                    }
-                })
-                if process_result.get("success"):
-                    processes.append(process_result.get("node"))
-                    
-                    # Create relationship between process and department
-                    agent.execute_tool("add_relationship", {
-                        "from_node": process_result.get("node"),
-                        "to_node": dept,
-                        "relationship_type": "OWNED_BY",
-                        "properties": {"created": "2024-01-01"}
-                    })
+        # Insert employees
+        emp_nodes = {}
+        for emp in data["employees"]:
+            emp_result = agent.execute_tool("add_node", {
+                "node_type": "Person",
+                "properties": {
+                    "name": emp["name"],
+                    "email": emp["email"],
+                    "role": emp["role"],
+                    "department": emp["department"],
+                    "location": emp.get("location", ""),
+                    "status": emp.get("status", "active"),
+                    "skills": ",".join(emp.get("skills", [])),
+                    "tenure_years": emp.get("tenure_years", 0),
+                    "level": emp.get("level", "")
+                }
+            })
+            if emp_result.get("success"):
+                emp_nodes[emp["name"]] = emp_result.get("node")
         
-        # Create some inter-department relationships
-        for i in range(min(3, len(departments) - 1)):
-            if i + 1 < len(departments):
+        print(f"✓ Inserted {len(emp_nodes)} employees into Neo4j")
+        
+        # Insert projects
+        project_nodes = {}
+        for project in data["projects"]:
+            project_result = agent.execute_tool("add_node", {
+                "node_type": "Project",
+                "properties": {
+                    "name": project["name"],
+                    "description": project.get("description", ""),
+                    "status": project.get("status", "active"),
+                    "start_date": project.get("start_date", ""),
+                    "end_date": project.get("end_date", ""),
+                    "budget": project.get("budget", 0),
+                    "priority": project.get("priority", "medium"),
+                    "department": project.get("department", ""),
+                    "sponsor": project.get("sponsor", ""),
+                    "manager": project.get("manager", "")
+                }
+            })
+            if project_result.get("success"):
+                project_nodes[project["name"]] = project_result.get("node")
+        
+        print(f"✓ Inserted {len(project_nodes)} projects into Neo4j")
+        
+        # Insert systems
+        system_nodes = {}
+        for system in data["systems"]:
+            system_result = agent.execute_tool("add_node", {
+                "node_type": "System",
+                "properties": {
+                    "name": system["name"],
+                    "type": system.get("type", ""),
+                    "vendor": system.get("vendor", ""),
+                    "version": system.get("version", ""),
+                    "status": system.get("status", "active"),
+                    "criticality": system.get("criticality", "medium"),
+                    "owner": system.get("owner", ""),
+                    "department": system.get("department", "")
+                }
+            })
+            if system_result.get("success"):
+                system_nodes[system["name"]] = system_result.get("node")
+        
+        print(f"✓ Inserted {len(system_nodes)} systems into Neo4j")
+        
+        # Insert processes
+        process_nodes = {}
+        for process in data["processes"]:
+            process_result = agent.execute_tool("add_node", {
+                "node_type": "Process",
+                "properties": {
+                    "name": process["name"],
+                    "description": process.get("description", ""),
+                    "category": process.get("category", ""),
+                    "owner": process.get("owner", ""),
+                    "department": process.get("department", ""),
+                    "frequency": process.get("frequency", ""),
+                    "complexity": process.get("complexity", "medium"),
+                    "automation_level": process.get("automation_level", "manual"),
+                    "status": process.get("status", "active")
+                }
+            })
+            if process_result.get("success"):
+                process_nodes[process["name"]] = process_result.get("node")
+        
+        print(f"✓ Inserted {len(process_nodes)} processes into Neo4j")
+        
+        # Insert relationships
+        relationships_created = 0
+        
+        # Department membership
+        for rel in data["relationships"]["department_membership"]:
+            if rel["from"] in emp_nodes and rel["to"] in dept_nodes:
                 agent.execute_tool("add_relationship", {
-                    "from_node": departments[i],
-                    "to_node": departments[i + 1],
-                    "relationship_type": "DEPENDS_ON",
-                    "properties": {"dependency_type": "data_flow"}
+                    "from_node": emp_nodes[rel["from"]],
+                    "to_node": dept_nodes[rel["to"]],
+                    "relationship_type": "BELONGS_TO",
+                    "properties": {"allocation_percentage": rel.get("allocation_percentage", 100)}
                 })
+                relationships_created += 1
+        
+        # Reporting relationships
+        for rel in data["relationships"]["reporting"]:
+            if rel["from"] in emp_nodes and rel["to"] in emp_nodes:
+                agent.execute_tool("add_relationship", {
+                    "from_node": emp_nodes[rel["from"]],
+                    "to_node": emp_nodes[rel["to"]],
+                    "relationship_type": "REPORTS_TO",
+                    "properties": {"relationship_type": rel.get("relationship_type", "direct")}
+                })
+                relationships_created += 1
+        
+        # Process ownership
+        for rel in data["relationships"]["process_ownership"]:
+            if rel["from"] in emp_nodes and rel["to"] in process_nodes:
+                agent.execute_tool("add_relationship", {
+                    "from_node": emp_nodes[rel["from"]],
+                    "to_node": process_nodes[rel["to"]],
+                    "relationship_type": "OWNS",
+                    "properties": {"ownership_type": rel.get("ownership_type", "primary")}
+                })
+                relationships_created += 1
+        
+        # Process participation
+        for rel in data["relationships"]["collaboration"]:
+            if rel["from"] in emp_nodes and rel["to"] in process_nodes:
+                agent.execute_tool("add_relationship", {
+                    "from_node": emp_nodes[rel["from"]],
+                    "to_node": process_nodes[rel["to"]],
+                    "relationship_type": "PERFORMS",
+                    "properties": {"role": rel.get("role", "participant")}
+                })
+                relationships_created += 1
+        
+        # System usage
+        for rel in data["relationships"]["system_usage"]:
+            if rel["from"] in emp_nodes and rel["to"] in system_nodes:
+                agent.execute_tool("add_relationship", {
+                    "from_node": emp_nodes[rel["from"]],
+                    "to_node": system_nodes[rel["to"]],
+                    "relationship_type": "USES",
+                    "properties": {
+                        "usage_frequency": rel.get("usage_frequency", "daily"),
+                        "proficiency": rel.get("proficiency", "intermediate")
+                    }
+                })
+                relationships_created += 1
+        
+        # Project assignments
+        for rel in data["relationships"]["project_assignments"]:
+            if rel["from"] in emp_nodes and rel["to"] in project_nodes:
+                agent.execute_tool("add_relationship", {
+                    "from_node": emp_nodes[rel["from"]],
+                    "to_node": project_nodes[rel["to"]],
+                    "relationship_type": "WORKS_ON",
+                    "properties": {
+                        "role": rel.get("role", "contributor"),
+                        "allocation_percentage": rel.get("allocation_percentage", 50)
+                    }
+                })
+                relationships_created += 1
+        
+        print(f"✓ Created {relationships_created} relationships in Neo4j")
         
         return SampleDataResponse(
             success=True,
-            message=f"Successfully generated sample data for {request.company_name}",
+            message=f"Successfully generated comprehensive data for {request.company_name}",
             data_generated={
                 "company_name": request.company_name,
-                "departments_created": len(departments),
-                "people_created": len(people),
-                "processes_created": len(processes),
-                "total_nodes": len(departments) + len(people) + len(processes)
+                "company_size": request.company_size,
+                "departments_created": len(dept_nodes),
+                "employees_created": len(emp_nodes),
+                "projects_created": len(project_nodes),
+                "systems_created": len(system_nodes),
+                "processes_created": len(process_nodes),
+                "relationships_created": relationships_created,
+                "total_nodes": len(dept_nodes) + len(emp_nodes) + len(project_nodes) + len(system_nodes) + len(process_nodes),
+                "files_generated": result.get("files", {}),
+                "statistics": result.get("statistics", {})
             }
         )
         
     except Exception as e:
+        import traceback
         print(f"Error generating sample data: {e}")
+        print(traceback.format_exc())
         return SampleDataResponse(
             success=False,
             message=f"Failed to generate sample data: {str(e)}",
