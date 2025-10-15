@@ -1,27 +1,19 @@
 {
   "name": "interlinked-artofstrategy-backend",
   "version": "1.0.0",
-  "description": "Backend services for Interlinked Art of Strategy project - Neo4j connection and graph operations",
-  "main": "neo4j-connect.ts",
+  "description": "Backend services for Interlinked Art of Strategy project - Python FastAPI with Agent Tool Architecture",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/neo4j-connect.js",
-    "dev": "ts-node neo4j-connect.ts",
-    "test": "ts-node neo4j-connect.ts"
-  },
-  "dependencies": {
-    "neo4j-driver": "^5.15.0",
-    "dotenv": "^16.3.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "typescript": "^5.3.0",
-    "ts-node": "^10.9.0"
+    "dev": "cd api && source venv/bin/activate && python main.py",
+    "start": "cd api && source venv/bin/activate && python main.py",
+    "install-deps": "cd api && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
+    "test": "cd api && source venv/bin/activate && python -m pytest"
   },
   "keywords": [
+    "fastapi",
+    "python",
     "neo4j",
     "graph-database",
-    "typescript",
+    "ai-agents",
     "strategy"
   ],
   "author": "Interlinked Team",

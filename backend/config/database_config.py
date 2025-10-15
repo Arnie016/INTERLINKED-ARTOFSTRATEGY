@@ -140,15 +140,21 @@ def validate_database_config(config: DatabaseConfig) -> Dict[str, Any]:
     # Test connection (if possible)
     try:
         from neo4j import GraphDatabase
-        driver = GraphDatabase.driver(
-            config.neo4j_uri,
-            auth=(config.neo4j_username, config.neo4j_password),
-            max_connection_pool_size=config.max_connection_pool_size,
-            connection_timeout=config.connection_timeout,
-            max_transaction_retry_time=config.max_transaction_retry_time,
-            encrypted=config.enable_ssl,
-            trust=config.trust_strategy
-        )
+        # Build driver configuration
+        driver_config = {
+            "auth": (config.neo4j_username, config.neo4j_password),
+            "max_connection_pool_size": config.max_connection_pool_size,
+            "connection_timeout": config.connection_timeout,
+            "max_transaction_retry_time": config.max_transaction_retry_time,
+        }
+        
+        # Only add SSL configuration if URI doesn't already specify it
+        # URI schemes like neo4j+ssc://, neo4j+s:// already include SSL settings
+        uri = config.neo4j_uri.lower()
+        if config.enable_ssl and not any(scheme in uri for scheme in ['+ssc', '+s']):
+            driver_config["encrypted"] = True
+        
+        driver = GraphDatabase.driver(config.neo4j_uri, **driver_config)
         
         # Test connection
         with driver.session() as session:

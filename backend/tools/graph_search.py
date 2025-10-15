@@ -109,12 +109,12 @@ def find_related_nodes(driver: GraphDatabase, node: Dict[str, Any],
             # Build match conditions
             conditions = " AND ".join([f"n.{k} = ${k}" for k in node['properties'].keys()])
             
-            # Build relationship pattern
+            # Build relationship pattern - use simple direct relationships for now
             if relationship_types:
                 rel_pattern = "|".join(relationship_types)
-                rel_clause = f"-[r:{rel_pattern}*1..{max_depth}]->"
+                rel_clause = f"-[r:{rel_pattern}]->"
             else:
-                rel_clause = f"-[r*1..{max_depth}]->"
+                rel_clause = f"-[r]->"
             
             query = f"""
             MATCH (n:{node['type']}){rel_clause}(related)

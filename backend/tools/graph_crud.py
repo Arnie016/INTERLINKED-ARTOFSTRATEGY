@@ -267,13 +267,17 @@ def list_nodes(driver: GraphDatabase, node_type: str,
         with driver.session() as session:
             query = f"""
             MATCH (n:{node_type})
-            RETURN n
+            RETURN n, id(n) as node_id
             SKIP $offset
             LIMIT $limit
             """
             
             result = session.run(query, {"offset": offset, "limit": limit})
-            nodes = [dict(record['n']) for record in result]
+            nodes = []
+            for record in result:
+                node_data = dict(record['n'])
+                node_data['id'] = record['node_id']
+                nodes.append(node_data)
             
             return {
                 "success": True,
@@ -285,6 +289,91 @@ def list_nodes(driver: GraphDatabase, node_type: str,
                 
     except Exception as e:
         return {"success": False, "error": f"Error listing nodes: {str(e)}"}
+
+
+def list_relationships(driver: GraphDatabase, relationship_type: Optional[str] = None,
+                      limit: int = 100, offset: int = 0) -> Dict[str, Any]:
+    """
+    List relationships with optional type filtering and pagination.
+    
+    Args:
+        driver: Neo4j driver instance
+        relationship_type: Optional relationship type to filter by
+        limit: Maximum number of relationships to return
+        offset: Number of relationships to skip
+    
+    Returns:
+        Dict containing list of relationships or error information
+    """
+    try:
+        with driver.session() as session:
+            if relationship_type:
+                query = f"""
+                MATCH ()-[r:{relationship_type}]->()
+                RETURN r, id(startNode(r)) as start_node_id, id(endNode(r)) as end_node_id, type(r) as type
+                SKIP $offset
+                LIMIT $limit
+                """
+            else:
+                query = """
+                MATCH ()-[r]->()
+                RETURN r, id(startNode(r)) as start_node_id, id(endNode(r)) as end_node_id, type(r) as type
+                SKIP $offset
+                LIMIT $limit
+                """
+            
+            result = session.run(query, {"offset": offset, "limit": limit})
+            relationships = []
+            
+            for record in result:
+                rel_data = dict(record['r'])
+                relationships.append({
+                    "id": record['r'].id,
+                    "type": record['type'],
+                    "start_node_id": record['start_node_id'],
+                    "end_node_id": record['end_node_id'],
+                    "properties": rel_data
+                })
+            
+            return {
+                "success": True,
+                "relationships": relationships,
+                "count": len(relationships),
+                "offset": offset,
+                "limit": limit
+            }
+                
+    except Exception as e:
+        return {"success": False, "error": f"Error listing relationships: {str(e)}"}
+
+
+def test_connection(driver: GraphDatabase) -> Dict[str, Any]:
+    """
+    Test the Neo4j database connection.
+    
+    Args:
+        driver: Neo4j driver instance
+    
+    Returns:
+        Dict containing connection test result
+    """
+    try:
+        with driver.session() as session:
+            result = session.run("RETURN 1 as test")
+            test_value = result.single()['test']
+            
+            return {
+                "success": True,
+                "message": f"Connection successful, test value: {test_value}",
+                "test_value": test_value
+            }
+                
+    except Exception as e:
+        return {
+            "success": False, 
+            "error": f"Connection test failed: {str(e)}",
+            "message": f"Connection test failed: {str(e)}"
+        }
 
 
 # Tool registry for this module
@@ -322,6 +411,18 @@ TOOLS = {
     "list_nodes": {
         "function": list_nodes,
         "description": "List nodes of a specific type with pagination",
+        "category": "crud",
+        "permissions": ["extractor", "analyzer", "admin", "user"]
+    },
+    "list_relationships": {
+        "function": list_relationships,
+        "description": "List relationships with optional type filtering and pagination",
+        "category": "crud",
+        "permissions": ["extractor", "analyzer", "admin", "user"]
+    },
+    "test_connection": {
+        "function": test_connection,
+        "description": "Test the Neo4j database connection",
         "category": "crud",
         "permissions": ["extractor", "analyzer", "admin", "user"]
     }

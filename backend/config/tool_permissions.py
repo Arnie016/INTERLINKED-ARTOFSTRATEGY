@@ -27,6 +27,8 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
         "update_node",
         "get_node",
         "list_nodes",
+        "list_relationships",
+        "test_connection",
         
         # Limited search for validation
         "search_nodes",
@@ -37,6 +39,8 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
         # Read-only CRUD
         "get_node",
         "list_nodes",
+        "list_relationships",
+        "test_connection",
         
         # Analysis Tools
         "find_bottlenecks",
@@ -68,6 +72,8 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
         "delete_node",
         "get_node",
         "list_nodes",
+        "list_relationships",
+        "test_connection",
         
         # All Analysis Tools
         "find_bottlenecks",
@@ -99,6 +105,7 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
         # Read-only CRUD
         "get_node",
         "list_nodes",
+        "list_relationships",
         
         # Safe Analysis Tools
         "find_bottlenecks",
@@ -122,7 +129,7 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
 TOOL_CATEGORIES = {
     "crud": [
         "add_node", "add_relationship", "update_node", "delete_node",
-        "get_node", "list_nodes"
+        "get_node", "list_nodes", "list_relationships", "test_connection"
     ],
     "analysis": [
         "find_bottlenecks", "analyze_organizational_structure",
