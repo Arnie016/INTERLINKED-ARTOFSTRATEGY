@@ -10,14 +10,14 @@ import json
 
 try:
     from .base_agent import BaseAgent
-    from ..config import AgentConfig, DatabaseConfig
-    from ..models import validate_entity_data, validate_relationship_data
+    from ...config import AgentConfig, DatabaseConfig
+    from ...models import validate_entity_data, validate_relationship_data
 except ImportError:
     # Handle direct execution
     import sys
     import os
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from agents.base_agent import BaseAgent
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from agents.llm_agents.base_agent import BaseAgent
     from config import AgentConfig, DatabaseConfig
     from models import validate_entity_data, validate_relationship_data
 

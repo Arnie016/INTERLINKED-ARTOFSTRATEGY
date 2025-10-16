@@ -109,36 +109,76 @@ export default function GraphVisualization({
         {
           selector: 'edge',
           style: {
-            'width': 3,
+            'width': 2,
             'line-color': '#6B7280',
             'target-arrow-color': '#6B7280',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(label)',
-            'font-size': '10px',
+            'font-size': '8px',
             'text-rotation': 'autorotate',
-            'text-margin-y': -10
+            'text-margin-y': -8,
+            'text-background-color': 'white',
+            'text-background-opacity': 0.8,
+            'text-background-padding': '2px',
+            'text-border-width': 1,
+            'text-border-color': '#E5E7EB'
           }
         },
         {
           selector: 'edge[type="REPORTS_TO"]',
           style: {
             'line-color': '#3B82F6',
-            'target-arrow-color': '#3B82F6'
+            'target-arrow-color': '#3B82F6',
+            'width': 3
           }
         },
         {
-          selector: 'edge[type="PERFORMS"]',
+          selector: 'edge[type="WORKS_WITH"]',
           style: {
             'line-color': '#10B981',
-            'target-arrow-color': '#10B981'
+            'target-arrow-color': '#10B981',
+            'width': 2
           }
         },
         {
-          selector: 'edge[type="DEPENDS_ON"]',
+          selector: 'edge[type="BELONGS_TO"]',
+          style: {
+            'line-color': '#8B5CF6',
+            'target-arrow-color': '#8B5CF6',
+            'width': 2
+          }
+        },
+        {
+          selector: 'edge[type="ASSIGNED_TO"]',
           style: {
             'line-color': '#F59E0B',
-            'target-arrow-color': '#F59E0B'
+            'target-arrow-color': '#F59E0B',
+            'width': 2
+          }
+        },
+        {
+          selector: 'edge[type="USES"]',
+          style: {
+            'line-color': '#EF4444',
+            'target-arrow-color': '#EF4444',
+            'width': 2
+          }
+        },
+        {
+          selector: 'edge[type="HEADS"]',
+          style: {
+            'line-color': '#DC2626',
+            'target-arrow-color': '#DC2626',
+            'width': 3
+          }
+        },
+        {
+          selector: 'edge[type="OWNS"]',
+          style: {
+            'line-color': '#7C3AED',
+            'target-arrow-color': '#7C3AED',
+            'width': 2
           }
         },
         {
@@ -199,6 +239,8 @@ export default function GraphVisualization({
     setError(null)
 
     try {
+      console.log(`Loading graph data: ${data.nodes.length} nodes, ${data.edges.length} edges`)
+      
       // Convert data to Cytoscape format
       const elements = [
         ...data.nodes.map(node => ({
@@ -221,25 +263,37 @@ export default function GraphVisualization({
         }))
       ]
 
+      console.log(`Converted to Cytoscape elements: ${elements.length} total elements`)
+
       // Clear existing elements and add new ones
       cyRef.current.elements().remove()
       cyRef.current.add(elements)
 
-      // Apply layout
+      // Verify elements were added
+      const addedNodes = cyRef.current.nodes().length
+      const addedEdges = cyRef.current.edges().length
+      console.log(`Cytoscape now has: ${addedNodes} nodes, ${addedEdges} edges`)
+
+      // Apply layout with better settings for large graphs
       const layout = cyRef.current.layout({
         name: 'dagre',
         rankDir: 'TB',
-        spacingFactor: 1.5,
-        nodeSep: 50,
-        edgeSep: 20,
-        rankSep: 100
+        spacingFactor: 2.0,
+        nodeSep: 30,
+        edgeSep: 10,
+        rankSep: 80,
+        fit: true,
+        padding: 20
       } as any)
       layout.run()
 
       // Fit the graph to the container
       cyRef.current.fit()
 
+      console.log('Graph layout applied successfully')
+
     } catch (err) {
+      console.error('Error updating graph:', err)
       setError(err instanceof Error ? err.message : 'Failed to update graph')
     } finally {
       setIsLoading(false)
@@ -286,6 +340,7 @@ export default function GraphVisualization({
       {/* Legend - Moved to top */}
       <div className="p-2 border-b border-gray-200 bg-gray-50">
         <div className="flex flex-wrap gap-4 text-xs justify-center">
+          {/* Node Types */}
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             <span>Person</span>
@@ -301,6 +356,43 @@ export default function GraphVisualization({
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
             <span>Project</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <span>System</span>
+          </div>
+          
+          {/* Relationship Types */}
+          <div className="border-l border-gray-300 pl-4 ml-2">
+            <span className="font-semibold text-gray-600">Relationships:</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-blue-500"></div>
+            <span>REPORTS_TO</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-green-500"></div>
+            <span>WORKS_WITH</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-purple-500"></div>
+            <span>BELONGS_TO</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-yellow-500"></div>
+            <span>ASSIGNED_TO</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-red-500"></div>
+            <span>USES</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-red-600"></div>
+            <span>HEADS</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-4 h-0.5 bg-violet-500"></div>
+            <span>OWNS</span>
           </div>
         </div>
       </div>

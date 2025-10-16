@@ -13,7 +13,7 @@ import sys
 import os
 
 # Add backend to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(__file__))
 
 from tools.mock_generation import generate_mock_data
 
@@ -39,11 +39,12 @@ def test_small_company():
     print(f"  - Systems: {stats['total_systems']}")
     print(f"  - Processes: {stats['total_processes']}")
     print(f"  - Relationships: {stats['total_relationships']}")
-    print(f"  - Communications: {stats['total_communications']}")
     
-    # Validate ranges for small company
-    assert 10 <= stats['total_employees'] <= 50, f"Employee count out of range: {stats['total_employees']}"
-    assert 3 <= stats['total_departments'] <= 6, f"Department count out of range: {stats['total_departments']}"
+    # Validate ranges for small company (5 employees, 2 departments, 2 projects, 15 processes)
+    assert stats['total_employees'] == 5, f"Employee count should be 5, got: {stats['total_employees']}"
+    assert stats['total_departments'] == 2, f"Department count should be 2, got: {stats['total_departments']}"
+    assert stats['total_projects'] == 2, f"Project count should be 2, got: {stats['total_projects']}"
+    assert stats['total_processes'] == 15, f"Process count should be 15, got: {stats['total_processes']}"
     
     return result
 
@@ -69,11 +70,12 @@ def test_medium_company():
     print(f"  - Systems: {stats['total_systems']}")
     print(f"  - Processes: {stats['total_processes']}")
     print(f"  - Relationships: {stats['total_relationships']}")
-    print(f"  - Communications: {stats['total_communications']}")
     
-    # Validate ranges for medium company
-    assert 50 <= stats['total_employees'] <= 200, f"Employee count out of range: {stats['total_employees']}"
-    assert 6 <= stats['total_departments'] <= 12, f"Department count out of range: {stats['total_departments']}"
+    # Validate ranges for medium company (15 employees, 5 departments, 5 projects, 45 processes)
+    assert stats['total_employees'] == 15, f"Employee count should be 15, got: {stats['total_employees']}"
+    assert stats['total_departments'] == 5, f"Department count should be 5, got: {stats['total_departments']}"
+    assert stats['total_projects'] == 5, f"Project count should be 5, got: {stats['total_projects']}"
+    assert stats['total_processes'] == 45, f"Process count should be 45, got: {stats['total_processes']}"
     
     return result
 
@@ -99,11 +101,12 @@ def test_large_company():
     print(f"  - Systems: {stats['total_systems']}")
     print(f"  - Processes: {stats['total_processes']}")
     print(f"  - Relationships: {stats['total_relationships']}")
-    print(f"  - Communications: {stats['total_communications']}")
     
-    # Validate ranges for large company
-    assert 200 <= stats['total_employees'] <= 1000, f"Employee count out of range: {stats['total_employees']}"
-    assert 12 <= stats['total_departments'] <= 25, f"Department count out of range: {stats['total_departments']}"
+    # Validate ranges for large company (30 employees, 10 departments, 10 projects, 90 processes)
+    assert stats['total_employees'] == 30, f"Employee count should be 30, got: {stats['total_employees']}"
+    assert stats['total_departments'] == 10, f"Department count should be 10, got: {stats['total_departments']}"
+    assert stats['total_projects'] == 10, f"Project count should be 10, got: {stats['total_projects']}"
+    assert stats['total_processes'] == 90, f"Process count should be 90, got: {stats['total_processes']}"
     
     return result
 
@@ -136,14 +139,14 @@ def test_data_integrity(result):
     print("✓ All department heads are valid employees")
     
     # Check reporting relationships
-    reporting_rels = result["data"]["relationships"]["reporting"]
+    reporting_rels = result["data"]["relationships"]["reports_to"]
     for rel in reporting_rels:
         assert rel["from"] in employee_names, f"Reporting relationship from unknown employee: {rel['from']}"
         assert rel["to"] in employee_names, f"Reporting relationship to unknown employee: {rel['to']}"
     print("✓ All reporting relationships are valid")
     
     # Check department membership
-    dept_membership = result["data"]["relationships"]["department_membership"]
+    dept_membership = result["data"]["relationships"]["belongs_to_department"]
     for rel in dept_membership:
         assert rel["from"] in employee_names, f"Department membership from unknown employee: {rel['from']}"
         assert rel["to"] in dept_names, f"Department membership to unknown department: {rel['to']}"

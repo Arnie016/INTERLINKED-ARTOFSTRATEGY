@@ -15,17 +15,17 @@ try:
     from .extractor_agent import ExtractorAgent
     from .analyzer_agent import AnalyzerAgent
     from .admin_agent import AdminAgent
-    from ..config import AgentConfig, DatabaseConfig, get_agent_config, get_database_config
+    from ...config import AgentConfig, DatabaseConfig, get_agent_config, get_database_config
 except ImportError:
     # Handle direct execution
     import sys
     import os
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from agents.base_agent import BaseAgent
-    from agents.graph_agent import GraphAgent
-    from agents.extractor_agent import ExtractorAgent
-    from agents.analyzer_agent import AnalyzerAgent
-    from agents.admin_agent import AdminAgent
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from agents.llm_agents.base_agent import BaseAgent
+    from agents.llm_agents.graph_agent import GraphAgent
+    from agents.llm_agents.extractor_agent import ExtractorAgent
+    from agents.llm_agents.analyzer_agent import AnalyzerAgent
+    from agents.llm_agents.admin_agent import AdminAgent
     from config import AgentConfig, DatabaseConfig, get_agent_config, get_database_config
 
 

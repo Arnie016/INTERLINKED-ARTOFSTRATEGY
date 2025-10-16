@@ -16,7 +16,7 @@ import uvicorn
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dotenv import load_dotenv
-from agents.agent_orchestrator import AgentOrchestrator
+from agents.llm_agents.agent_orchestrator import AgentOrchestrator
 
 # Load environment variables from backend directory
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
@@ -168,78 +168,94 @@ async def chat_with_agent(chat_message: ChatMessage):
 async def get_graph_data():
     """Get Neo4j graph data for visualization."""
     try:
-        # Use extractor agent to get graph data
-        agent = orchestrator.get_agent("extractor")
+        from config.database_config import get_database_config
+        from neo4j import GraphDatabase
         
-        # Get all nodes of different types
+        # Get database configuration
+        db_config = get_database_config()
+        
+        # Create Neo4j driver
+        driver = GraphDatabase.driver(
+            db_config.neo4j_uri,
+            auth=(db_config.neo4j_username, db_config.neo4j_password)
+        )
+        
         all_nodes = []
-        node_types = ["Person", "Department", "Process", "Project"]
-        
-        for node_type in node_types:
-            try:
-                nodes_result = agent.execute_tool("list_nodes", {"node_type": node_type, "limit": 50})
-                if nodes_result.get("success"):
-                    for node in nodes_result.get("nodes", []):
-                        all_nodes.append({
-                            "id": str(node.get("id", "")),
-                            "label": node.get("name", node.get("title", "Unknown")),
-                            "type": node_type,
-                            "properties": node
-                        })
-            except Exception as e:
-                print(f"Warning: Could not fetch {node_type} nodes: {e}")
-        
-        # Get relationships
         edges = []
-        try:
-            relationships_result = agent.execute_tool("list_relationships", {"limit": 100})
-            if relationships_result.get("success"):
-                for rel in relationships_result.get("relationships", []):
-                    edges.append({
-                        "id": str(rel.get("id", "")),
-                        "source": str(rel.get("start_node_id", "")),
-                        "target": str(rel.get("end_node_id", "")),
-                        "type": rel.get("type", "RELATES_TO"),
-                        "properties": rel
-                    })
-        except Exception as e:
-            print(f"Warning: Could not fetch relationships: {e}")
         
+        with driver.session() as session:
+            # Get all nodes
+            nodes_query = """
+            MATCH (n)
+            RETURN n, labels(n) as node_labels
+            LIMIT 1000
+            """
+            nodes_result = session.run(nodes_query)
+            
+            for record in nodes_result:
+                node = record["n"]
+                node_labels = record["node_labels"]
+                node_type = node_labels[0] if node_labels else "Unknown"
+                
+                # Get node properties
+                node_props = dict(node)
+                
+                all_nodes.append({
+                    "id": str(node.id),
+                    "label": node_props.get("name", node_props.get("title", f"{node_type}_{node.id}")),
+                    "type": node_type,
+                    "properties": node_props
+                })
+            
+            # Get all relationships
+            relationships_query = """
+            MATCH (a)-[r]->(b)
+            RETURN a, r, b, type(r) as rel_type
+            LIMIT 1000
+            """
+            relationships_result = session.run(relationships_query)
+            
+            for record in relationships_result:
+                start_node = record["a"]
+                end_node = record["b"]
+                relationship = record["r"]
+                rel_type = record["rel_type"]
+                
+                # Get relationship properties
+                rel_props = dict(relationship)
+                
+                edges.append({
+                    "id": f"{start_node.id}_{rel_type}_{end_node.id}",
+                    "source": str(start_node.id),
+                    "target": str(end_node.id),
+                    "type": rel_type,
+                    "properties": rel_props
+                })
+        
+        driver.close()
+        
+        print(f"Retrieved {len(all_nodes)} nodes and {len(edges)} relationships from Neo4j")
         return GraphData(nodes=all_nodes, edges=edges)
         
     except Exception as e:
         print(f"Error in get_graph_data: {e}")
+        import traceback
+        traceback.print_exc()
         # Return empty graph data instead of raising exception
         return GraphData(nodes=[], edges=[])
 
 @app.post("/api/generate-sample-data", response_model=SampleDataResponse)
 async def generate_sample_data(request: SampleDataRequest):
-    """Generate comprehensive organizational data for a company using the mock data generator."""
+    """Generate comprehensive organizational data for a company using the mock data generator and data loading orchestrator."""
     try:
         from tools.mock_generation import generate_mock_data
+        from agents.data_agents.data_loading_orchestrator import DataLoadingOrchestrator
         
         # Validate company size
         if request.company_size not in ["small", "medium", "large"]:
             return SampleDataResponse(
                 success=False,
                 message=f"Invalid company size: {request.company_size}. Must be 'small', 'medium', or 'large'.",
-                data_generated={}
-            )
-        
-        # Get the admin agent for clearing data (has reset_graph permission)
-        admin_agent = orchestrator.get_agent("admin")
-        
-        # Get the extractor agent for data insertion
-        agent = orchestrator.get_agent("extractor")
-        
-        # First, clear existing data using admin agent
-        print(f"Clearing existing data for {request.company_name}...")
-        clear_result = admin_agent.execute_tool("reset_graph", {"confirm": True})
-        
-        if not clear_result.get("success"):
-            return SampleDataResponse(
-                success=False,
-                message=f"Failed to clear existing data: {clear_result.get('error', 'Unknown error')}",
                 data_generated={}
             )
         
@@ -256,211 +272,34 @@ async def generate_sample_data(request: SampleDataRequest):
                 data_generated={}
             )
         
-        data = result["data"]
+        # Initialize data loading orchestrator
+        orchestrator = DataLoadingOrchestrator()
         
-        # Insert data into Neo4j
-        print("Inserting data into Neo4j...")
+        # Use orchestrator to initialize graph with data
+        print("Initializing graph with generated data using DataLoadingOrchestrator...")
+        load_result = orchestrator.initialize_graph_with_data(request.company_name)
         
-        # Insert departments
-        dept_nodes = {}
-        for dept in data["departments"]:
-            dept_result = agent.execute_tool("add_node", {
-                "node_type": "Department",
-                "properties": {
-                    "name": dept["name"],
-                    "description": dept.get("description", ""),
-                    "budget": dept.get("budget", 0),
-                    "head": dept.get("head", ""),
-                    "location": dept.get("location", ""),
-                    "size": dept.get("headcount", 0),
-                    "status": dept.get("status", "active")
-                }
-            })
-            if dept_result.get("success"):
-                dept_nodes[dept["name"]] = dept_result.get("node")
-        
-        print(f"✓ Inserted {len(dept_nodes)} departments into Neo4j")
-        
-        # Insert employees
-        emp_nodes = {}
-        for emp in data["employees"]:
-            emp_result = agent.execute_tool("add_node", {
-                "node_type": "Person",
-                "properties": {
-                    "name": emp["name"],
-                    "email": emp["email"],
-                    "role": emp["role"],
-                    "department": emp["department"],
-                    "location": emp.get("location", ""),
-                    "status": emp.get("status", "active"),
-                    "skills": ",".join(emp.get("skills", [])),
-                    "tenure_years": emp.get("tenure_years", 0),
-                    "level": emp.get("level", "")
-                }
-            })
-            if emp_result.get("success"):
-                emp_nodes[emp["name"]] = emp_result.get("node")
-        
-        print(f"✓ Inserted {len(emp_nodes)} employees into Neo4j")
-        
-        # Insert projects
-        project_nodes = {}
-        for project in data["projects"]:
-            project_result = agent.execute_tool("add_node", {
-                "node_type": "Project",
-                "properties": {
-                    "name": project["name"],
-                    "description": project.get("description", ""),
-                    "status": project.get("status", "active"),
-                    "start_date": project.get("start_date", ""),
-                    "end_date": project.get("end_date", ""),
-                    "budget": project.get("budget", 0),
-                    "priority": project.get("priority", "medium"),
-                    "department": project.get("department", ""),
-                    "sponsor": project.get("sponsor", ""),
-                    "manager": project.get("manager", "")
-                }
-            })
-            if project_result.get("success"):
-                project_nodes[project["name"]] = project_result.get("node")
-        
-        print(f"✓ Inserted {len(project_nodes)} projects into Neo4j")
-        
-        # Insert systems
-        system_nodes = {}
-        for system in data["systems"]:
-            system_result = agent.execute_tool("add_node", {
-                "node_type": "System",
-                "properties": {
-                    "name": system["name"],
-                    "type": system.get("type", ""),
-                    "vendor": system.get("vendor", ""),
-                    "version": system.get("version", ""),
-                    "status": system.get("status", "active"),
-                    "criticality": system.get("criticality", "medium"),
-                    "owner": system.get("owner", ""),
-                    "department": system.get("department", "")
-                }
-            })
-            if system_result.get("success"):
-                system_nodes[system["name"]] = system_result.get("node")
-        
-        print(f"✓ Inserted {len(system_nodes)} systems into Neo4j")
-        
-        # Insert processes
-        process_nodes = {}
-        for process in data["processes"]:
-            process_result = agent.execute_tool("add_node", {
-                "node_type": "Process",
-                "properties": {
-                    "name": process["name"],
-                    "description": process.get("description", ""),
-                    "category": process.get("category", ""),
-                    "owner": process.get("owner", ""),
-                    "department": process.get("department", ""),
-                    "frequency": process.get("frequency", ""),
-                    "complexity": process.get("complexity", "medium"),
-                    "automation_level": process.get("automation_level", "manual"),
-                    "status": process.get("status", "active")
-                }
-            })
-            if process_result.get("success"):
-                process_nodes[process["name"]] = process_result.get("node")
-        
-        print(f"✓ Inserted {len(process_nodes)} processes into Neo4j")
-        
-        # Insert relationships
-        relationships_created = 0
-        
-        # Department membership
-        for rel in data["relationships"]["department_membership"]:
-            if rel["from"] in emp_nodes and rel["to"] in dept_nodes:
-                agent.execute_tool("add_relationship", {
-                    "from_node": emp_nodes[rel["from"]],
-                    "to_node": dept_nodes[rel["to"]],
-                    "relationship_type": "BELONGS_TO",
-                    "properties": {"allocation_percentage": rel.get("allocation_percentage", 100)}
-                })
-                relationships_created += 1
-        
-        # Reporting relationships
-        for rel in data["relationships"]["reporting"]:
-            if rel["from"] in emp_nodes and rel["to"] in emp_nodes:
-                agent.execute_tool("add_relationship", {
-                    "from_node": emp_nodes[rel["from"]],
-                    "to_node": emp_nodes[rel["to"]],
-                    "relationship_type": "REPORTS_TO",
-                    "properties": {"relationship_type": rel.get("relationship_type", "direct")}
-                })
-                relationships_created += 1
-        
-        # Process ownership
-        for rel in data["relationships"]["process_ownership"]:
-            if rel["from"] in emp_nodes and rel["to"] in process_nodes:
-                agent.execute_tool("add_relationship", {
-                    "from_node": emp_nodes[rel["from"]],
-                    "to_node": process_nodes[rel["to"]],
-                    "relationship_type": "OWNS",
-                    "properties": {"ownership_type": rel.get("ownership_type", "primary")}
-                })
-                relationships_created += 1
-        
-        # Process participation
-        for rel in data["relationships"]["collaboration"]:
-            if rel["from"] in emp_nodes and rel["to"] in process_nodes:
-                agent.execute_tool("add_relationship", {
-                    "from_node": emp_nodes[rel["from"]],
-                    "to_node": process_nodes[rel["to"]],
-                    "relationship_type": "PERFORMS",
-                    "properties": {"role": rel.get("role", "participant")}
-                })
-                relationships_created += 1
-        
-        # System usage
-        for rel in data["relationships"]["system_usage"]:
-            if rel["from"] in emp_nodes and rel["to"] in system_nodes:
-                agent.execute_tool("add_relationship", {
-                    "from_node": emp_nodes[rel["from"]],
-                    "to_node": system_nodes[rel["to"]],
-                    "relationship_type": "USES",
-                    "properties": {
-                        "usage_frequency": rel.get("usage_frequency", "daily"),
-                        "proficiency": rel.get("proficiency", "intermediate")
-                    }
-                })
-                relationships_created += 1
-        
-        # Project assignments
-        for rel in data["relationships"]["project_assignments"]:
-            if rel["from"] in emp_nodes and rel["to"] in project_nodes:
-                agent.execute_tool("add_relationship", {
-                    "from_node": emp_nodes[rel["from"]],
-                    "to_node": project_nodes[rel["to"]],
-                    "relationship_type": "WORKS_ON",
-                    "properties": {
-                        "role": rel.get("role", "contributor"),
-                        "allocation_percentage": rel.get("allocation_percentage", 50)
-                    }
-                })
-                relationships_created += 1
-        
-        print(f"✓ Created {relationships_created} relationships in Neo4j")
+        if not load_result.get("success"):
+            return SampleDataResponse(
+                success=False,
+                message=f"Failed to load data into Neo4j: {load_result.get('error', 'Unknown error')}",
+                data_generated={}
+            )
         
         return SampleDataResponse(
             success=True,
-            message=f"Successfully generated comprehensive data for {request.company_name}",
+            message=f"Successfully generated and loaded data for {request.company_name}",
             data_generated={
                 "company_name": request.company_name,
                 "company_size": request.company_size,
-                "departments_created": len(dept_nodes),
-                "employees_created": len(emp_nodes),
-                "projects_created": len(project_nodes),
-                "systems_created": len(system_nodes),
-                "processes_created": len(process_nodes),
-                "relationships_created": relationships_created,
-                "total_nodes": len(dept_nodes) + len(emp_nodes) + len(project_nodes) + len(system_nodes) + len(process_nodes),
+                "nodes_created": load_result.get("summary", {}).get("nodes_created", 0),
+                "relationships_created": load_result.get("summary", {}).get("relationships_created", 0),
+                "additional_relationships": load_result.get("summary", {}).get("additional_relationships", 0),
+                "files_loaded": load_result.get("summary", {}).get("files_loaded", []),
+                "final_status": load_result.get("final_status", {}),
                 "files_generated": result.get("files", {}),
-                "statistics": result.get("statistics", {})
+                "statistics": result.get("statistics", {}),
+                "duration_seconds": load_result.get("summary", {}).get("duration_seconds", 0)
             }
         )
         
@@ -473,6 +312,70 @@ async def generate_sample_data(request: SampleDataRequest):
             message=f"Failed to generate sample data: {str(e)}",
             data_generated={}
         )
+
+@app.post("/api/load-existing-data")
+async def load_existing_data(request: SampleDataRequest):
+    """Load existing data files into Neo4j without generating new data."""
+    try:
+        from agents.data_agents.data_loading_orchestrator import DataLoadingOrchestrator
+        
+        # Initialize data loading orchestrator
+        orchestrator = DataLoadingOrchestrator()
+        
+        # Load existing data files
+        print(f"Loading existing data files for {request.company_name}...")
+        load_result = orchestrator.initialize_graph_with_data(request.company_name)
+        
+        if not load_result.get("success"):
+            return SampleDataResponse(
+                success=False,
+                message=f"Failed to load existing data: {load_result.get('error', 'Unknown error')}",
+                data_generated={}
+            )
+        
+        return SampleDataResponse(
+            success=True,
+            message=f"Successfully loaded existing data for {request.company_name}",
+            data_generated={
+                "company_name": request.company_name,
+                "nodes_created": load_result.get("summary", {}).get("nodes_created", 0),
+                "relationships_created": load_result.get("summary", {}).get("relationships_created", 0),
+                "additional_relationships": load_result.get("summary", {}).get("additional_relationships", 0),
+                "files_loaded": load_result.get("summary", {}).get("files_loaded", []),
+                "final_status": load_result.get("final_status", {}),
+                "duration_seconds": load_result.get("summary", {}).get("duration_seconds", 0)
+            }
+        )
+        
+    except Exception as e:
+        import traceback
+        print(f"Error loading existing data: {e}")
+        print(traceback.format_exc())
+        return SampleDataResponse(
+            success=False,
+            message=f"Failed to load existing data: {str(e)}",
+            data_generated={}
+        )
+
+@app.get("/api/available-data-files")
+async def get_available_data_files():
+    """Get information about available data files."""
+    try:
+        from agents.data_agents.data_loading_orchestrator import DataLoadingOrchestrator
+        
+        orchestrator = DataLoadingOrchestrator()
+        result = orchestrator.get_available_data_files()
+        
+        return {
+            "success": result.get("success", False),
+            "data": result
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": f"Failed to get available data files: {str(e)}"
+        }
 
 @app.get("/api/graph/cypher")
 async def execute_cypher_query(query: str):

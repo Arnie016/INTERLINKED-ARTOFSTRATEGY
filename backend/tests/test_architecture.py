@@ -32,12 +32,12 @@ def test_imports():
         
         # Test agents imports
         print("4. Testing agents imports...")
-        from agents.base_agent import BaseAgent
-        from agents.graph_agent import GraphAgent
-        from agents.extractor_agent import ExtractorAgent
-        from agents.analyzer_agent import AnalyzerAgent
-        from agents.admin_agent import AdminAgent
-        from agents.agent_orchestrator import AgentOrchestrator
+        from agents.llm_agents.base_agent import BaseAgent
+        from agents.llm_agents.graph_agent import GraphAgent
+        from agents.llm_agents.extractor_agent import ExtractorAgent
+        from agents.llm_agents.analyzer_agent import AnalyzerAgent
+        from agents.llm_agents.admin_agent import AdminAgent
+        from agents.llm_agents.agent_orchestrator import AgentOrchestrator
         print("   ✅ Agents imported successfully.")
         
         # Test tool categories

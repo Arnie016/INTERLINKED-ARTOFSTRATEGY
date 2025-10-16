@@ -16,14 +16,14 @@ import boto3
 from neo4j import GraphDatabase
 
 try:
-    from ..tools import get_tools_for_role, ALL_TOOLS
-    from ..config import AgentConfig, DatabaseConfig, validate_role_access, validate_tool_parameters
-    from ..models import validate_entity_data, validate_relationship_data
+    from ...tools import get_tools_for_role, ALL_TOOLS
+    from ...config import AgentConfig, DatabaseConfig, validate_role_access, validate_tool_parameters
+    from ...models import validate_entity_data, validate_relationship_data
 except ImportError:
     # Handle direct execution
     import sys
     import os
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     from tools import get_tools_for_role, ALL_TOOLS
     from config import AgentConfig, DatabaseConfig, validate_role_access, validate_tool_parameters
     from models import validate_entity_data, validate_relationship_data

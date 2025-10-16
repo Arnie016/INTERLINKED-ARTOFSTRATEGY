@@ -10,13 +10,13 @@ import json
 
 try:
     from .base_agent import BaseAgent
-    from ..config import AgentConfig, DatabaseConfig
+    from ...config import AgentConfig, DatabaseConfig
 except ImportError:
     # Handle direct execution
     import sys
     import os
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from agents.base_agent import BaseAgent
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from agents.llm_agents.base_agent import BaseAgent
     from config import AgentConfig, DatabaseConfig
 
 

@@ -86,6 +86,18 @@ export default function HomePage() {
       if (response.ok) {
         const data = await response.json()
         console.log('Graph data loaded:', data)
+        console.log(`Received ${data.nodes?.length || 0} nodes and ${data.edges?.length || 0} edges`)
+        
+        // Log edge types for debugging
+        if (data.edges) {
+          const edgeTypes: Record<string, number> = {}
+          data.edges.forEach((edge: any) => {
+            const type = edge.type || 'Unknown'
+            edgeTypes[type] = (edgeTypes[type] || 0) + 1
+          })
+          console.log('Edge types received:', edgeTypes)
+        }
+        
         setGraphData(data)
       } else {
         console.error('Failed to load graph data:', response.status, response.statusText)
@@ -239,7 +251,18 @@ export default function HomePage() {
                     <h2 className="text-md font-semibold text-gray-900">Organizational Graph</h2>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {graphData ? `${graphData.nodes.length} nodes, ${graphData.edges.length} relationships` : 'No data loaded'}
+                    {graphData ? (
+                      <div>
+                        <div>{graphData.nodes.length} nodes, {graphData.edges.length} relationships</div>
+                        <div className="text-xs text-gray-400">
+                          {graphData.nodes.filter(n => n.type === 'Person').length} People, 
+                          {graphData.nodes.filter(n => n.type === 'Department').length} Departments, 
+                          {graphData.nodes.filter(n => n.type === 'Project').length} Projects, 
+                          {graphData.nodes.filter(n => n.type === 'System').length} Systems, 
+                          {graphData.nodes.filter(n => n.type === 'Process').length} Processes
+                        </div>
+                      </div>
+                    ) : 'No data loaded'}
                   </div>
                 </div>
                 
@@ -257,9 +280,9 @@ export default function HomePage() {
                     onChange={(e) => setCompanySize(e.target.value)}
                     className="px-3 py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
                   >
-                    <option value="small">Small (10-50)</option>
-                    <option value="medium">Medium (50-200)</option>
-                    <option value="large">Large (200-1000)</option>
+                    <option value="small">Small (5 employees)</option>
+                    <option value="medium">Medium (15 employees)</option>
+                    <option value="large">Large (30 employees)</option>
                   </select>
                   <button
                     onClick={generateSampleData}

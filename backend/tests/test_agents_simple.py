@@ -9,7 +9,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from dotenv import load_dotenv
-from agents.agent_orchestrator import AgentOrchestrator
+from agents.llm_agents.agent_orchestrator import AgentOrchestrator
 
 # Load environment variables
 load_dotenv()
