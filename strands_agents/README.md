@@ -1,118 +1,178 @@
-# Interlinked - Strands Agents Implementation
+# Strands Agents for Organizational Graph Analysis
 
-This directory contains the Strands Agents implementation for the Interlinked Art of Strategy platform, deployed on AWS Bedrock AgentCore Runtime.
+A multi-agent system built with AWS Bedrock and Strands Agents SDK for analyzing organizational graph data stored in Neo4j.
 
 ## Architecture
 
-The implementation follows the "Agents as Tools" pattern with:
+This project implements the **"Agents as Tools"** pattern with specialized agents orchestrated by a main coordinator.
 
-- **OrchestratorAgent**: Main entry point that routes user prompts to specialized agents
-- **GraphAgent**: Handles read/search operations on the Neo4j graph
-- **AnalyzerAgent**: Performs analytics operations on graph data
-- **ExtractorAgent**: Manages data ingestion with controlled write operations
-- **AdminAgent**: Handles privileged administrative operations
+For detailed architecture information, see:
+- 📐 [Architecture Overview](docs/architecture/overview.md) - Complete architecture documentation
+- 🔗 [Integration Guide](docs/architecture/integration.md) - Integration patterns and utilities
 
-## Project Structure
+### Quick Overview
 
 ```
-strands_agents/
-├── src/
-│   ├── agents/           # Agent definitions
-│   │   ├── orchestrator_agent.py
-│   │   ├── graph_agent.py
-│   │   ├── analyzer_agent.py
-│   │   ├── extractor_agent.py
-│   │   └── admin_agent.py
-│   ├── tools/            # Tool implementations
-│   ├── utils/            # Shared utilities
-│   └── config/           # Configuration modules
-├── tests/                # Test files
-├── docs/                 # Documentation
-├── deployment/           # Deployment configurations
-│   ├── dev/              # Development environment
-│   └── prod/             # Production environment
-└── requirements.txt      # Python dependencies
+OrchestratorAgent (Main Entry Point)
+├── GraphAgent (Read-only queries and search)
+├── AnalyzerAgent (Advanced analytics and insights)
+├── ExtractorAgent (Data ingestion and writes)
+└── AdminAgent (Privileged admin operations)
 ```
 
-## Setup
+## Getting Started
 
-### Prerequisites
+For detailed setup instructions, see our comprehensive guides:
 
-- Python 3.11+
-- AWS CLI configured with appropriate credentials
-- Access to AWS Bedrock AgentCore
-- Neo4j instance (local or Aura)
+- 🚀 [Quick Start Guide](docs/guides/quick-start.md) - Get up and running in minutes
+- ☁️ [AWS Setup Guide](docs/guides/aws-setup.md) - Configure AWS credentials and Bedrock
+- 🗄️ [Neo4j Setup Guide](docs/guides/neo4j-setup.md) - Configure Neo4j connection
 
-### Installation
+### Quick Install
 
-1. Create and activate a virtual environment:
 ```bash
+# Clone and navigate to project
 cd strands_agents
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Run automated setup
+./setup.sh
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your credentials
 ```
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
+## Usage
+
+### Basic Usage with Orchestrator
+
+```python
+from strands_agents.src.agents import create_orchestrator_agent
+
+# Create orchestrator for a regular user
+orchestrator = create_orchestrator_agent(user_role="user")
+
+# Ask a question
+response = orchestrator("Who are the most influential people in Engineering?")
+print(response)
+
+# Complex multi-agent query
+response = orchestrator(
+    "Find all bottlenecks in our processes and suggest who should own each one"
+)
+print(response)
 ```
 
-3. Configure environment variables:
-```bash
-cp ../.env.example .env
-# Edit .env with your configuration
+### Using Specialized Agents Directly
+
+```python
+from strands_agents.src.agents import (
+    create_graph_agent,
+    create_analyzer_agent,
+    create_extractor_agent
+)
+
+# Graph Agent for searches
+graph_agent = create_graph_agent()
+response = graph_agent("Find all people in the Data department")
+print(response)
+
+# Analyzer Agent for analytics
+analyzer_agent = create_analyzer_agent()
+response = analyzer_agent("Detect communities in our organization")
+print(response)
+
+# Extractor Agent for data ingestion (requires appropriate role)
+extractor_agent = create_extractor_agent()
+response = extractor_agent(
+    "Create a new person: Alice Johnson, Senior Engineer, Data team"
+)
+print(response)
 ```
 
-### Development
+### Convenience Function
 
-Run the FastAPI proxy for development:
-```bash
-uvicorn src.api.main:app --reload --port 8000
-```
+```python
+from strands_agents.src.agents import process_query
 
-### Deployment
-
-Deploy to AWS Bedrock AgentCore Runtime:
-```bash
-# Coming soon - deployment scripts will be added
+# Simple one-line query processing
+response = process_query(
+    "What processes does the Engineering department own?",
+    user_role="user"
+)
+print(response)
 ```
 
 ## Configuration
 
-### Environment Variables (Development)
+Configuration is managed through environment variables and YAML files.
 
-- `NEO4J_URI`: Neo4j connection URI
-- `NEO4J_USERNAME`: Neo4j username
-- `NEO4J_PASSWORD`: Neo4j password
-- `NEO4J_DATABASE`: Neo4j database name
-- `AWS_REGION`: AWS region (default: us-west-2)
-- `AWS_PROFILE`: AWS profile to use
+For detailed configuration information:
+- [Configuration Module](src/config/README.md) - Configuration system details
+- [Utilities Module](src/utils/README.md) - Shared utilities and helpers
 
-### AWS Secrets Manager (Production)
+### Quick Configuration
 
-Secrets are stored following the naming convention: `interlinked-aos-<env>`
+```python
+from strands_agents.src.agents import create_orchestrator_agent
 
-## Testing
+# Create with default configuration
+orchestrator = create_orchestrator_agent(user_role="user")
 
-Run tests:
-```bash
-pytest tests/ -v
-```
-
-Run with coverage:
-```bash
-pytest tests/ --cov=src --cov-report=html
+# Or customize model settings
+custom_config = {
+    "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+    "temperature": 0.3
+}
+orchestrator = create_orchestrator_agent(
+    user_role="user",
+    custom_model_config=custom_config
+)
 ```
 
 ## Documentation
 
-See the [docs](./docs/) directory for detailed documentation on:
-- Agent definitions and capabilities
-- Tool implementations
-- Security and access control
-- Deployment procedures
-- Operational runbooks
+Comprehensive documentation is organized by topic:
+
+### 📚 Guides (Getting Started)
+- [Quick Start](docs/guides/quick-start.md) - Get up and running
+- [AWS Setup](docs/guides/aws-setup.md) - Configure AWS credentials
+- [Neo4j Setup](docs/guides/neo4j-setup.md) - Configure database connection
+
+### 🏗️ Architecture (Technical Details)
+- [Architecture Overview](docs/architecture/overview.md) - System architecture
+- [Integration Guide](docs/architecture/integration.md) - Integration patterns
+
+### 🔧 Implementation (Development)
+- [Agent Implementation](docs/implementation/agents.md) - Agent implementation details
+- [Utilities Implementation](docs/implementation/utilities.md) - Shared utilities
+- [Setup Details](docs/implementation/setup.md) - Project setup summary
+
+### 📖 Module Documentation
+- [Configuration](src/config/README.md) - Configuration management
+- [Utilities](src/utils/README.md) - Shared utilities and helpers
+- [Testing](tests/README.md) - Testing guide and best practices
+
+## Testing
+
+```bash
+# Run all tests
+cd strands_agents
+python -m pytest tests/ -v
+
+# Run with coverage
+python -m pytest tests/ --cov=src --cov-report=html
+
+# Run specific tests
+python -m pytest tests/test_agents_basic.py -v
+```
+
+See the [Testing Guide](tests/README.md) for more details.
 
 ## License
 
-Proprietary - See LICENSE in root directory
+See main project LICENSE file.
+
+## Support
+
+For issues or questions, please contact the development team or create an issue in the project repository.
