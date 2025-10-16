@@ -249,7 +249,7 @@ async def generate_sample_data(request: SampleDataRequest):
     """Generate comprehensive organizational data for a company using the mock data generator and data loading orchestrator."""
     try:
         from tools.mock_generation import generate_mock_data
-        from agents.data_agents.data_loading_orchestrator import DataLoadingOrchestrator
+        from agents.data_agents.standalone_data_loader import StandaloneDataLoader
         
         # Validate company size
         if request.company_size not in ["small", "medium", "large"]:
@@ -272,12 +272,16 @@ async def generate_sample_data(request: SampleDataRequest):
                 data_generated={}
             )
         
-        # Initialize data loading orchestrator
-        orchestrator = DataLoadingOrchestrator()
+        # Initialize standalone data loader
+        data_loader = StandaloneDataLoader()
         
-        # Use orchestrator to initialize graph with data
-        print("Initializing graph with generated data using DataLoadingOrchestrator...")
-        load_result = orchestrator.initialize_graph_with_data(request.company_name)
+        # Use standalone data loader to initialize graph with data
+        print("Initializing graph with generated data using StandaloneDataLoader...")
+        try:
+            load_result = data_loader.initialize_graph_with_data(request.company_name)
+        finally:
+            # Always close the data loader connection
+            data_loader.close()
         
         if not load_result.get("success"):
             return SampleDataResponse(
