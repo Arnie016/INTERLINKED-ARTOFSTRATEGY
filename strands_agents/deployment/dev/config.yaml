@@ -1,0 +1,77 @@
+# Development Environment Configuration
+# For local development and testing
+
+environment: development
+region: us-west-2
+
+# Agent Configuration
+agents:
+  orchestrator:
+    name: interlinked-aos-dev-orchestrator
+    model: anthropic.claude-3-5-sonnet-20241022-v2:0
+    description: "Main orchestrator agent for routing user queries"
+
+  graph:
+    name: interlinked-aos-dev-graph-agent
+    model: anthropic.claude-3-5-sonnet-20241022-v2:0
+    description: "Handles graph read and search operations"
+
+  analyzer:
+    name: interlinked-aos-dev-analyzer-agent
+    model: anthropic.claude-3-5-sonnet-20241022-v2:0
+    description: "Performs analytics on graph data"
+
+  extractor:
+    name: interlinked-aos-dev-extractor-agent
+    model: anthropic.claude-3-5-sonnet-20241022-v2:0
+    description: "Manages data ingestion with controlled writes"
+
+  admin:
+    name: interlinked-aos-dev-admin-agent
+    model: anthropic.claude-3-5-sonnet-20241022-v2:0
+    description: "Handles privileged administrative operations"
+
+# Neo4j Configuration
+neo4j:
+  connection_mode: direct  # direct or gateway
+  timeout: 30
+  max_retry: 3
+
+# AgentCore Features
+agentcore:
+  memory:
+    enabled: true
+    retention_days: 7
+
+  observability:
+    enabled: true
+    trace_model_calls: true
+    trace_tool_calls: true
+    log_level: INFO
+
+  identity:
+    enabled: false  # Disabled for local dev
+    provider: cognito
+
+# Security
+security:
+  secrets_provider: env  # env or secretsmanager
+  allowed_node_labels:
+    - Person
+    - Organization
+    - Project
+    - Technology
+    - Resource
+  allowed_relationship_types:
+    - WORKS_AT
+    - MANAGES
+    - PARTICIPATES_IN
+    - USES
+    - RELATES_TO
+
+# Performance
+performance:
+  query_timeout: 30
+  max_query_complexity: 1000
+  result_pagination_size: 50
+  max_result_size: 1000
