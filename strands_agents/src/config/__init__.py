@@ -22,6 +22,15 @@ from .neo4j_config import (
     load_dotenv_if_exists,
     ENVIRONMENT_PRESETS
 )
+from .secrets_manager import (
+    SecretsManagerClient,
+    get_neo4j_credentials_from_secrets,
+    get_secret_name_for_environment,
+    validate_secret_structure,
+    create_secret_json,
+    get_secrets_client,
+    reset_secrets_client
+)
 from .constants import (
     # Enums
     NodeLabel,
@@ -105,6 +114,15 @@ __all__ = [
     "reset_config_instance",
     "load_dotenv_if_exists",
     "ENVIRONMENT_PRESETS",
+    
+    # AWS Secrets Manager
+    "SecretsManagerClient",
+    "get_neo4j_credentials_from_secrets",
+    "get_secret_name_for_environment",
+    "validate_secret_structure",
+    "create_secret_json",
+    "get_secrets_client",
+    "reset_secrets_client",
     
     # Constants - Enums
     "NodeLabel",

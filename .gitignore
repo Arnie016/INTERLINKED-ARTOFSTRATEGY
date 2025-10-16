@@ -102,4 +102,9 @@ dev-debug.log
 
 # Task files
 # tasks.json
-# tasks/ 
+# tasks/
+
+# IDE and AI Assistant configurations
+.claude/
+.cursor/
+.taskmaster/

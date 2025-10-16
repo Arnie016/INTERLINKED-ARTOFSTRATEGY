@@ -6,7 +6,7 @@ Version: 0.1 (Draft)
 
 Date: 2025-10-16
 
-Owner: Stef (with AI pair programming assistant)
+Owner: Stef 
 
 Status: Draft for implementation
 
