@@ -87,7 +87,7 @@ def admin_agent(query: str) -> str:
         
         # Create the Admin Agent with Bedrock Claude 3.5 Sonnet
         model = BedrockModel(
-            model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+            model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
             temperature=0.0,  # Zero temperature for maximum precision in admin tasks
             max_tokens=4096
         )
@@ -146,7 +146,7 @@ def create_admin_agent(custom_model_config: Optional[Dict[str, Any]] = None) -> 
     # Create model with custom config or defaults
     model_config = custom_model_config or {}
     model = BedrockModel(
-        model_id=model_config.get("model_id", "anthropic.claude-3-5-sonnet-20241022-v2:0"),
+        model_id=model_config.get("model_id", "anthropic.claude-3-5-sonnet-20240620-v1:0"),
         temperature=model_config.get("temperature", 0.0),
         max_tokens=model_config.get("max_tokens", 4096),
         top_p=model_config.get("top_p", None),

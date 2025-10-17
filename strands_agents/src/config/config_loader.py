@@ -251,7 +251,7 @@ def load_config(environment: Optional[str] = None) -> Config:
     Example:
         >>> config = load_config("development")
         >>> config.get("agents.orchestrator.model")
-        'anthropic.claude-3-5-sonnet-20241022-v2:0'
+        'anthropic.claude-3-5-sonnet-20240620-v1:0'
         >>> config.get_agent_config("orchestrator")
         {'name': '...', 'model': '...'}
     """

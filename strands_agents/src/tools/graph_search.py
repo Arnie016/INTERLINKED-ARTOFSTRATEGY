@@ -96,7 +96,7 @@ def search_nodes(
         MATCH (n)
         WHERE {where_clause}
         RETURN 
-            id(n) as node_id,
+            elementId(n) as node_id,
             labels(n) as labels,
             properties(n) as properties
         LIMIT $limit
@@ -252,26 +252,30 @@ def find_related_nodes(
             rel_pattern = "-[r]-"
         
         # Add relationship type filter if specified
+        rel_type_filter = ""
         if relationship_types:
             rel_type_filter = ":" + "|".join(relationship_types)
-        else:
-            rel_type_filter = ""
         
-        # Build path pattern based on depth
-        path_pattern = f"(n){rel_pattern * depth}(m)"
+        # Build the relationship pattern with proper syntax
+        if direction == "outgoing":
+            rel_pattern_full = f"-[r{rel_type_filter}]->"
+        elif direction == "incoming":
+            rel_pattern_full = f"<-[r{rel_type_filter}]-"
+        else:  # both
+            rel_pattern_full = f"-[r{rel_type_filter}]-"
         
         cypher_query = f"""
         MATCH (n:{node_type})
         WHERE {where_clause}
         WITH n
         LIMIT 1
-        MATCH path = (n){rel_pattern}{rel_type_filter}(m)
+        MATCH path = (n){rel_pattern_full}(m)
         WHERE m <> n
         RETURN 
-            id(n) as center_id,
+            elementId(n) as center_id,
             labels(n) as center_labels,
             properties(n) as center_properties,
-            id(m) as related_id,
+            elementId(m) as related_id,
             labels(m) as related_labels,
             properties(m) as related_properties,
             type(r) as relationship_type,

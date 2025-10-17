@@ -19,6 +19,13 @@ from .orchestrator_agent import (
     process_query,
     ORCHESTRATOR_SYSTEM_PROMPT
 )
+from .orchestrator_agent_agentcore import (
+    create_orchestrator_with_agentcore,
+    create_agentcore_app,
+    AgentCoreMemoryHook,
+    AgentType,
+    IntentConfidence
+)
 from .graph_agent import (
     graph_agent,
     create_graph_agent,
@@ -41,10 +48,16 @@ from .admin_agent import (
 )
 
 __all__ = [
-    # Orchestrator
+    # Orchestrator - Simple (no AgentCore dependencies, for local testing)
     "create_orchestrator_agent",
     "process_query",
     "ORCHESTRATOR_SYSTEM_PROMPT",
+    # Orchestrator - AgentCore Integration (for production deployment)
+    "create_orchestrator_with_agentcore",
+    "create_agentcore_app",
+    "AgentCoreMemoryHook",
+    "AgentType",
+    "IntentConfidence",
     # Graph Agent
     "graph_agent",
     "create_graph_agent",
