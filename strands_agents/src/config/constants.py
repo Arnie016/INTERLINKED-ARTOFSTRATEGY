@@ -40,6 +40,7 @@ class RelationshipType(Enum):
     
     WORKS_AT = "WORKS_AT"
     MANAGES = "MANAGES"
+    REPORTS_TO = "REPORTS_TO"
     PARTICIPATES_IN = "PARTICIPATES_IN"
     USES = "USES"
     RELATES_TO = "RELATES_TO"
@@ -149,7 +150,7 @@ MAX_BULK_DELETE = 50
 DEFAULT_MEMORY_RETENTION_DAYS = 7
 
 # Model Configuration
-DEFAULT_MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+DEFAULT_MODEL_ID = "anthropic.claude-3-5-sonnet-20240620-v1:0"
 DEFAULT_MAX_TOKENS = 4096
 DEFAULT_TEMPERATURE = 0.7
 
@@ -227,13 +228,13 @@ SUCCESS_MESSAGES = {
 
 # Common Cypher patterns for reuse
 CYPHER_PATTERNS = {
-    "find_node_by_id": "MATCH (n) WHERE id(n) = $node_id RETURN n",
+    "find_node_by_id": "MATCH (n) WHERE elementId(n) = $node_id RETURN n",
     "find_node_by_property": "MATCH (n:{label}) WHERE n.{property} = $value RETURN n",
-    "find_relationships": "MATCH (a)-[r]->(b) WHERE id(a) = $node_id RETURN r, b",
+    "find_relationships": "MATCH (a)-[r]->(b) WHERE elementId(a) = $node_id RETURN r, b",
     "create_node": "CREATE (n:{label} $properties) RETURN n",
-    "update_node": "MATCH (n) WHERE id(n) = $node_id SET n += $properties RETURN n",
-    "delete_node": "MATCH (n) WHERE id(n) = $node_id DETACH DELETE n",
-    "create_relationship": "MATCH (a), (b) WHERE id(a) = $from_id AND id(b) = $to_id CREATE (a)-[r:{rel_type} $properties]->(b) RETURN r"
+    "update_node": "MATCH (n) WHERE elementId(n) = $node_id SET n += $properties RETURN n",
+    "delete_node": "MATCH (n) WHERE elementId(n) = $node_id DETACH DELETE n",
+    "create_relationship": "MATCH (a), (b) WHERE elementId(a) = $from_id AND elementId(b) = $to_id CREATE (a)-[r:{rel_type} $properties]->(b) RETURN r"
 }
 
 

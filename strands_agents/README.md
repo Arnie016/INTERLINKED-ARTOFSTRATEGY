@@ -38,9 +38,38 @@ cd strands_agents
 ./setup.sh
 
 # Configure environment
-cp .env.example .env
+cp env.template .env
 # Edit .env with your credentials
 ```
+
+## CLI Testing
+
+Test the orchestrator agent via command line interface in development or production:
+
+### Quick Test (5 minutes)
+```bash
+./run_cli_tests.sh --interactive
+```
+
+### Full Testing Documentation
+- 🎯 [CLI Quick Start](CLI_QUICKSTART.md) - Get testing in 5 minutes
+- 📋 [Complete Walkthrough](WALKTHROUGH.md) - Step-by-step guide with exact commands
+- 📚 [CLI Testing Guide](docs/guides/CLI_TESTING_GUIDE.md) - Comprehensive testing scenarios
+- 🛠️ [CLI Testing README](CLI_TESTING_README.md) - Documentation index
+
+### Automated Testing
+```bash
+# Local testing
+./run_cli_tests.sh --local
+
+# AgentCore deployment testing
+./run_cli_tests.sh --agentcore
+
+# All tests
+./run_cli_tests.sh --all
+```
+
+See [CLI Testing README](CLI_TESTING_README.md) for complete documentation.
 
 ## Usage
 

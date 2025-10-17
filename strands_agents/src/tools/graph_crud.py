@@ -90,7 +90,7 @@ def check_node_exists(session, label: str, properties: Dict[str, Any]) -> Option
     query = f"""
     MATCH (n:{label})
     WHERE n.name = $name
-    RETURN id(n) as node_id
+    RETURN elementId(n) as node_id
     LIMIT 1
     """
     
@@ -194,7 +194,7 @@ def create_node(
                 # Fetch existing node details
                 fetch_query = f"""
                 MATCH (n:{label})
-                WHERE id(n) = $node_id
+                WHERE elementId(n) = $node_id
                 RETURN n
                 """
                 result = session.run(fetch_query, node_id=existing_node_id)
@@ -216,7 +216,7 @@ def create_node(
             # Create new node
             create_query = f"""
             CREATE (n:{label} $properties)
-            RETURN id(n) as node_id, n
+            RETURN elementId(n) as node_id, n
             """
             
             result = session.run(create_query, properties=validated_properties)
@@ -402,8 +402,8 @@ def create_relationship(
             # Check for existing relationship (idempotency)
             check_query = f"""
             MATCH (a)-[r:{relationship_type}]->(b)
-            WHERE id(a) = $start_id AND id(b) = $end_id
-            RETURN id(r) as rel_id, r
+            WHERE elementId(a) = $start_id AND elementId(b) = $end_id
+            RETURN elementId(r) as rel_id, r
             LIMIT 1
             """
             
@@ -442,9 +442,9 @@ def create_relationship(
             # Create new relationship
             create_query = f"""
             MATCH (a), (b)
-            WHERE id(a) = $start_id AND id(b) = $end_id
+            WHERE elementId(a) = $start_id AND elementId(b) = $end_id
             CREATE (a)-[r:{relationship_type} $properties]->(b)
-            RETURN id(r) as rel_id, r, id(a) as start_id, id(b) as end_id
+            RETURN elementId(r) as rel_id, r, id(a) as start_id, id(b) as end_id
             """
             
             result = session.run(
@@ -744,7 +744,7 @@ def bulk_ingest(
                         # Create node
                         create_query = f"""
                         CREATE (n:{label} $properties)
-                        RETURN id(n) as node_id
+                        RETURN elementId(n) as node_id
                         """
                         
                         result = tx.run(create_query, properties=properties)
@@ -768,8 +768,8 @@ def bulk_ingest(
                         # Verify nodes exist
                         verify_query = """
                         MATCH (a), (b)
-                        WHERE id(a) = $start_id AND id(b) = $end_id
-                        RETURN id(a) as a_id, id(b) as b_id
+                        WHERE elementId(a) = $start_id AND elementId(b) = $end_id
+                        RETURN elementId(a) as a_id, elementId(b) as b_id
                         """
                         
                         result = tx.run(verify_query, start_id=start_id, end_id=end_id)
@@ -782,7 +782,7 @@ def bulk_ingest(
                         # Check for existing relationship
                         check_query = f"""
                         MATCH (a)-[r:{rel_type}]->(b)
-                        WHERE id(a) = $start_id AND id(b) = $end_id
+                        WHERE elementId(a) = $start_id AND elementId(b) = $end_id
                         RETURN id(r) as rel_id
                         LIMIT 1
                         """
@@ -803,7 +803,7 @@ def bulk_ingest(
                         # Create relationship
                         create_query = f"""
                         MATCH (a), (b)
-                        WHERE id(a) = $start_id AND id(b) = $end_id
+                        WHERE elementId(a) = $start_id AND elementId(b) = $end_id
                         CREATE (a)-[r:{rel_type} $properties]->(b)
                         RETURN id(r) as rel_id
                         """
