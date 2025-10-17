@@ -1,0 +1,407 @@
+{
+  "company_name": "Interlinked",
+  "company_size": "small",
+  "generated_at": "2025-10-16T21:29:57.736146",
+  "employees": [
+    {
+      "name": "David Anderson",
+      "email": "david.anderson@innovate.io",
+      "role": "Sales Director",
+      "department": "Sales",
+      "level": "Director",
+      "tenure_years": 2.6641807631022223,
+      "salary": 133955,
+      "location": "London",
+      "skills": [
+        "Negotiation",
+        "Cold Calling",
+        "HubSpot",
+        "Salesforce",
+        "Relationship Building"
+      ],
+      "status": "active",
+      "start_date": "2019-03-08T21:29:57.733436"
+    },
+    {
+      "name": "Nathan Harris",
+      "email": "nathan.harris@innovate.io",
+      "role": "Account Executive",
+      "department": "Sales",
+      "level": "Mid-level",
+      "tenure_years": 4.459432816041879,
+      "salary": 70999,
+      "location": "London",
+      "skills": [
+        "HubSpot",
+        "Negotiation",
+        "Closing",
+        "Relationship Building",
+        "Cold Calling",
+        "Lead Generation"
+      ],
+      "status": "active",
+      "start_date": "2021-07-12T21:29:57.733468"
+    },
+    {
+      "name": "Emma Roberts",
+      "email": "emma.roberts@innovate.io",
+      "role": "Account Executive",
+      "department": "Sales",
+      "level": "Mid-level",
+      "tenure_years": 1.4310995375304403,
+      "salary": 173966,
+      "location": "London",
+      "skills": [
+        "Lead Generation",
+        "Relationship Building",
+        "Salesforce",
+        "HubSpot",
+        "Closing"
+      ],
+      "status": "active",
+      "start_date": "2018-06-25T21:29:57.733487"
+    },
+    {
+      "name": "Emma White",
+      "email": "emma.white@company.com",
+      "role": "Legal Director",
+      "department": "Legal",
+      "level": "VP",
+      "tenure_years": 8.42572864270862,
+      "salary": 124730,
+      "location": "London",
+      "skills": [
+        "Contract Law",
+        "Compliance",
+        "Risk Management",
+        "Intellectual Property",
+        "Negotiation",
+        "Regulatory"
+      ],
+      "status": "active",
+      "start_date": "2023-07-06T21:29:57.733505",
+      "is_ceo": true
+    },
+    {
+      "name": "Henry Garcia",
+      "email": "henry.garcia@techcorp.com",
+      "role": "Principal Legal Counsel",
+      "department": "Legal",
+      "level": "Junior",
+      "tenure_years": 4.756671593639151,
+      "salary": 165772,
+      "location": "London",
+      "skills": [
+        "Intellectual Property",
+        "Regulatory",
+        "Research"
+      ],
+      "status": "active",
+      "start_date": "2024-12-03T21:29:57.733523"
+    }
+  ],
+  "departments": [
+    {
+      "name": "Sales",
+      "description": "Sales department responsible for Enterprise Sales, SMB Sales, Sales Ops",
+      "budget": 1157531,
+      "headcount": 3,
+      "location": "London",
+      "status": "active",
+      "established_date": "2021-01-28T21:29:57.733302",
+      "functions": [
+        "Enterprise Sales",
+        "SMB Sales",
+        "Sales Ops"
+      ],
+      "head": "David Anderson"
+    },
+    {
+      "name": "Legal",
+      "description": "Legal department responsible for Contracts, Compliance, IP",
+      "budget": 186739,
+      "headcount": 2,
+      "location": "London",
+      "status": "active",
+      "established_date": "2022-01-01T21:29:57.733354",
+      "functions": [
+        "Contracts",
+        "Compliance",
+        "IP"
+      ],
+      "head": "Emma White"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Sales Process Optimization",
+      "description": "Sales Process Optimization project for Sales department",
+      "type": "operational",
+      "department": "Sales",
+      "status": "completed",
+      "priority": "critical",
+      "budget": 187391,
+      "start_date": "2025-02-06T21:29:57.733553",
+      "end_date": "2026-09-10T21:29:57.733558",
+      "duration_months": 4,
+      "team_size": 3
+    },
+    {
+      "name": "Security Infrastructure Upgrade",
+      "description": "Security Infrastructure Upgrade project for Legal department",
+      "type": "technical",
+      "department": "Legal",
+      "status": "planning",
+      "priority": "medium",
+      "budget": 270133,
+      "start_date": "2024-12-22T21:29:57.733567",
+      "end_date": "2026-01-21T21:29:57.733571",
+      "duration_months": 10,
+      "team_size": 3
+    }
+  ],
+  "systems": [
+    {
+      "name": "HubSpot",
+      "type": "marketing",
+      "description": "HubSpot system for organizational operations",
+      "vendor": "Oracle",
+      "users_count": 15,
+      "status": "active",
+      "cost_annual": 45731,
+      "implementation_date": "2023-08-18T21:29:57.733590"
+    },
+    {
+      "name": "ServiceNow",
+      "type": "it_service_management",
+      "description": "ServiceNow system for organizational operations",
+      "vendor": "Atlassian",
+      "users_count": 12,
+      "status": "active",
+      "cost_annual": 198824,
+      "implementation_date": "2023-10-11T21:29:57.733598"
+    },
+    {
+      "name": "Microsoft Teams",
+      "type": "communication",
+      "description": "Microsoft Teams system for organizational operations",
+      "vendor": "Atlassian",
+      "users_count": 30,
+      "status": "active",
+      "cost_annual": 29370,
+      "implementation_date": "2021-02-28T21:29:57.733604"
+    }
+  ],
+  "processes": [
+    {
+      "name": "Lead Qualification",
+      "description": "Lead Qualification process for Sales department",
+      "category": "Sales",
+      "owner": "David Anderson",
+      "department": "Sales",
+      "frequency": "quarterly",
+      "complexity": "low",
+      "automation_level": "manual",
+      "sla_hours": 8,
+      "status": "active",
+      "participants_count": 3,
+      "created_date": "2025-05-25T21:29:57.733624"
+    },
+    {
+      "name": "Demo Scheduling",
+      "description": "Demo Scheduling process for Sales department",
+      "category": "Sales",
+      "owner": "David Anderson",
+      "department": "Sales",
+      "frequency": "daily",
+      "complexity": "high",
+      "automation_level": "semi-automated",
+      "sla_hours": 2,
+      "status": "active",
+      "participants_count": 4,
+      "created_date": "2025-06-11T21:29:57.733636"
+    },
+    {
+      "name": "Contract Negotiation",
+      "description": "Contract Negotiation process for Sales department",
+      "category": "Sales",
+      "owner": "David Anderson",
+      "department": "Sales",
+      "frequency": "quarterly",
+      "complexity": "medium",
+      "automation_level": "manual",
+      "sla_hours": 2,
+      "status": "active",
+      "participants_count": 7,
+      "created_date": "2024-10-16T21:29:57.733644"
+    },
+    {
+      "name": "Deal Review",
+      "description": "Deal Review process for Sales department",
+      "category": "Sales",
+      "owner": "Nathan Harris",
+      "department": "Sales",
+      "frequency": "quarterly",
+      "complexity": "low",
+      "automation_level": "semi-automated",
+      "sla_hours": 24,
+      "status": "active",
+      "participants_count": 6,
+      "created_date": "2025-04-08T21:29:57.733652"
+    },
+    {
+      "name": "Pipeline Management",
+      "description": "Pipeline Management process for Sales department",
+      "category": "Sales",
+      "owner": "Nathan Harris",
+      "department": "Sales",
+      "frequency": "daily",
+      "complexity": "medium",
+      "automation_level": "semi-automated",
+      "sla_hours": 4,
+      "status": "active",
+      "participants_count": 3,
+      "created_date": "2025-03-07T21:29:57.733659"
+    },
+    {
+      "name": "Customer Outreach",
+      "description": "Customer Outreach process for Sales department",
+      "category": "Sales",
+      "owner": "Nathan Harris",
+      "department": "Sales",
+      "frequency": "monthly",
+      "complexity": "high",
+      "automation_level": "manual",
+      "sla_hours": 48,
+      "status": "active",
+      "participants_count": 10,
+      "created_date": "2025-03-08T21:29:57.733667"
+    },
+    {
+      "name": "Process 7",
+      "description": "Process 7 process for Sales department",
+      "category": "Sales",
+      "owner": "Emma Roberts",
+      "department": "Sales",
+      "frequency": "monthly",
+      "complexity": "high",
+      "automation_level": "manual",
+      "sla_hours": 2,
+      "status": "active",
+      "participants_count": 5,
+      "created_date": "2025-09-02T21:29:57.733674"
+    },
+    {
+      "name": "Process 8",
+      "description": "Process 8 process for Sales department",
+      "category": "Sales",
+      "owner": "Emma Roberts",
+      "department": "Sales",
+      "frequency": "as-needed",
+      "complexity": "low",
+      "automation_level": "automated",
+      "sla_hours": 24,
+      "status": "active",
+      "participants_count": 10,
+      "created_date": "2024-10-19T21:29:57.733681"
+    },
+    {
+      "name": "Process 9",
+      "description": "Process 9 process for Sales department",
+      "category": "Sales",
+      "owner": "Emma Roberts",
+      "department": "Sales",
+      "frequency": "weekly",
+      "complexity": "low",
+      "automation_level": "semi-automated",
+      "sla_hours": 2,
+      "status": "active",
+      "participants_count": 9,
+      "created_date": "2024-11-12T21:29:57.733689"
+    },
+    {
+      "name": "Standard Process",
+      "description": "Standard Process process for Legal department",
+      "category": "Legal",
+      "owner": "Emma White",
+      "department": "Legal",
+      "frequency": "daily",
+      "complexity": "low",
+      "automation_level": "semi-automated",
+      "sla_hours": 8,
+      "status": "active",
+      "participants_count": 3,
+      "created_date": "2025-09-06T21:29:57.733698"
+    },
+    {
+      "name": "Review Process",
+      "description": "Review Process process for Legal department",
+      "category": "Legal",
+      "owner": "Emma White",
+      "department": "Legal",
+      "frequency": "quarterly",
+      "complexity": "low",
+      "automation_level": "semi-automated",
+      "sla_hours": 48,
+      "status": "active",
+      "participants_count": 6,
+      "created_date": "2025-08-19T21:29:57.733705"
+    },
+    {
+      "name": "Approval Process",
+      "description": "Approval Process process for Legal department",
+      "category": "Legal",
+      "owner": "Emma White",
+      "department": "Legal",
+      "frequency": "quarterly",
+      "complexity": "medium",
+      "automation_level": "semi-automated",
+      "sla_hours": 48,
+      "status": "active",
+      "participants_count": 7,
+      "created_date": "2025-01-15T21:29:57.733728"
+    },
+    {
+      "name": "Monitoring Process",
+      "description": "Monitoring Process process for Legal department",
+      "category": "Legal",
+      "owner": "Henry Garcia",
+      "department": "Legal",
+      "frequency": "weekly",
+      "complexity": "medium",
+      "automation_level": "semi-automated",
+      "sla_hours": 8,
+      "status": "active",
+      "participants_count": 7,
+      "created_date": "2025-06-23T21:29:57.733736"
+    },
+    {
+      "name": "Process 5",
+      "description": "Process 5 process for Legal department",
+      "category": "Legal",
+      "owner": "Henry Garcia",
+      "department": "Legal",
+      "frequency": "daily",
+      "complexity": "high",
+      "automation_level": "automated",
+      "sla_hours": 24,
+      "status": "active",
+      "participants_count": 10,
+      "created_date": "2024-10-22T21:29:57.733743"
+    },
+    {
+      "name": "Process 6",
+      "description": "Process 6 process for Legal department",
+      "category": "Legal",
+      "owner": "Henry Garcia",
+      "department": "Legal",
+      "frequency": "weekly",
+      "complexity": "medium",
+      "automation_level": "automated",
+      "sla_hours": 24,
+      "status": "active",
+      "participants_count": 7,
+      "created_date": "2025-03-20T21:29:57.733751"
+    }
+  ]
+}

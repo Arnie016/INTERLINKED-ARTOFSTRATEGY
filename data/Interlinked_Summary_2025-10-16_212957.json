@@ -1,0 +1,17 @@
+{
+  "company_name": "Interlinked",
+  "company_size": "small",
+  "generated_at": "2025-10-16T21:29:57.739690",
+  "statistics": {
+    "total_employees": 5,
+    "total_departments": 2,
+    "total_projects": 2,
+    "total_systems": 3,
+    "total_processes": 15,
+    "total_relationships": 84
+  },
+  "files_generated": {
+    "entities": "/Users/genieworksm4/01 Coding/20_ArtofStrategy/INTERLINKED-ARTOFSTRATEGY/data/Interlinked_Entities_2025-10-16_212957.json",
+    "relationships": "/Users/genieworksm4/01 Coding/20_ArtofStrategy/INTERLINKED-ARTOFSTRATEGY/data/Interlinked_Relationships_2025-10-16_212957.json"
+  }
+}
