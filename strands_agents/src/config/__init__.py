@@ -31,6 +31,16 @@ from .secrets_manager import (
     get_secrets_client,
     reset_secrets_client
 )
+from .neo4j_driver import (
+    Neo4jDriverFactory,
+    ConnectionMode,
+    ConnectionState,
+    get_driver,
+    create_session,
+    validate_connection,
+    close_driver,
+    get_connection_metrics
+)
 from .constants import (
     # Enums
     NodeLabel,
@@ -123,6 +133,16 @@ __all__ = [
     "create_secret_json",
     "get_secrets_client",
     "reset_secrets_client",
+    
+    # Neo4j Driver Factory
+    "Neo4jDriverFactory",
+    "ConnectionMode",
+    "ConnectionState",
+    "get_driver",
+    "create_session",
+    "validate_connection",
+    "close_driver",
+    "get_connection_metrics",
     
     # Constants - Enums
     "NodeLabel",

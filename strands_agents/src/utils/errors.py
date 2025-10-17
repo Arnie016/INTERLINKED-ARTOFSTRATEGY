@@ -184,6 +184,23 @@ class AuthorizationError(AgentError):
         )
 
 
+class ConnectionError(AgentError):
+    """Raised when connection to external service fails."""
+    
+    def __init__(
+        self,
+        message: str = "Connection failed",
+        details: Optional[Dict[str, Any]] = None,
+        original_error: Optional[Exception] = None
+    ):
+        super().__init__(
+            message,
+            ErrorCode.GRAPH_CONNECTION_FAILED,
+            details,
+            original_error
+        )
+
+
 class GraphConnectionError(AgentError):
     """Raised when connection to graph database fails."""
     

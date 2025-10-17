@@ -491,3 +491,4 @@ def reset_secrets_client() -> None:
     _secret_cache.clear()
     logger.debug("Reset global secrets client and cleared cache")
 
+

@@ -26,6 +26,25 @@ New to the project? Start here:
    - Connection testing
    - Security best practices
 
+4. **[Secrets Manager Setup Guide](guides/secrets-manager-setup.md)**
+   - AWS Secrets Manager integration
+   - Secret structure and naming
+   - Production credential management
+   - Caching and fallback strategies
+
+5. **[Admin Operations Guide](guides/admin-operations.md)**
+   - Role-based access control
+   - Index management operations
+   - Label migration procedures
+   - Database maintenance and cleanup
+   - Safety measures and audit logging
+
+6. **[Performance Optimization Guide](guides/performance-optimization.md)**
+   - Result caching strategies
+   - Timeout management
+   - Performance monitoring
+   - Optimization best practices
+
 ### Architecture & Design
 
 Understanding the system:
@@ -76,7 +95,14 @@ For developers working on the codebase:
 **I'm configuring the system:**
 1. Check [AWS Setup Guide](guides/aws-setup.md)
 2. Review [Neo4j Setup Guide](guides/neo4j-setup.md)
-3. See [Configuration Module Docs](../src/config/README.md)
+3. See [Secrets Manager Setup](guides/secrets-manager-setup.md)
+4. Review [Configuration Module Docs](../src/config/README.md)
+
+**I'm performing admin operations:**
+1. Read [Admin Operations Guide](guides/admin-operations.md)
+2. Understand [RBAC and security](guides/admin-operations.md#role-based-access-control)
+3. Review [safety measures](guides/admin-operations.md#safety-measures)
+4. Check [audit logging](guides/admin-operations.md#audit-logging)
 
 **I'm integrating agents:**
 1. Read [Integration Guide](architecture/integration.md)
@@ -94,6 +120,11 @@ For developers working on the codebase:
 - [Quick Start](guides/quick-start.md)
 - [AWS Setup](guides/aws-setup.md)
 - [Neo4j Setup](guides/neo4j-setup.md)
+- [Secrets Manager](guides/secrets-manager-setup.md)
+
+**Performing admin operations:**
+- [Admin Operations Guide](guides/admin-operations.md)
+- [Performance Optimization](guides/performance-optimization.md)
 
 **Understanding the architecture:**
 - [Architecture Overview](architecture/overview.md)

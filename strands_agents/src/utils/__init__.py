@@ -17,6 +17,7 @@ from .errors import (
     ValidationError,
     AuthenticationError,
     AuthorizationError,
+    ConnectionError,
     GraphConnectionError,
     GraphQueryError,
     GraphSchemaError,
@@ -49,7 +50,9 @@ from .auth import (
     require_admin,
     check_write_permission,
     check_read_permission,
-    get_user_context_for_logging
+    get_user_context_for_logging,
+    require_role_decorator,
+    require_admin_role
 )
 from .response import (
     AgentResponse,
@@ -64,6 +67,27 @@ from .response import (
     format_graph_response,
     add_performance_metadata
 )
+from .query_safety import (
+    QuerySafetyValidator,
+    validate_tool_input,
+    rate_limit,
+    monitor_performance,
+    validate_query_before_execution,
+    clear_rate_limit_state
+)
+from .performance import (
+    ResultCache,
+    CacheEntry,
+    TimeoutError,
+    get_cache,
+    clear_cache,
+    with_timeout,
+    with_cache,
+    with_timeout_and_cache,
+    invalidate_cache_on_write,
+    get_cache_stats,
+    cleanup_expired_cache
+)
 
 __all__ = [
     # Logging
@@ -76,6 +100,7 @@ __all__ = [
     "ValidationError",
     "AuthenticationError",
     "AuthorizationError",
+    "ConnectionError",
     "GraphConnectionError",
     "GraphQueryError",
     "GraphSchemaError",
@@ -109,6 +134,8 @@ __all__ = [
     "check_write_permission",
     "check_read_permission",
     "get_user_context_for_logging",
+    "require_role_decorator",
+    "require_admin_role",
     
     # Response
     "AgentResponse",
@@ -121,6 +148,28 @@ __all__ = [
     "format_node_response",
     "format_relationship_response",
     "format_graph_response",
-    "add_performance_metadata"
+    "add_performance_metadata",
+    
+    # Query Safety
+    "QuerySafetyValidator",
+    "validate_tool_input",
+    "rate_limit",
+    "monitor_performance",
+    "validate_query_before_execution",
+    "clear_rate_limit_state",
+    
+    # Performance
+    "ResultCache",
+    "CacheEntry",
+    "TimeoutError",
+    "get_cache",
+    "clear_cache",
+    "with_timeout",
+    "with_cache",
+    "with_timeout_and_cache",
+    "invalidate_cache_on_write",
+    "get_cache_stats",
+    "cleanup_expired_cache"
 ]
+
 

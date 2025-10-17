@@ -325,3 +325,94 @@ def get_user_context_for_logging(auth: Optional[AuthContext]) -> Dict[str, Any]:
         "role": auth.role.value
     }
 
+
+def require_role_decorator(required_role: Role, required_permissions: Optional[List[Permission]] = None):
+    """
+    Decorator factory that creates a role-based access control decorator.
+    
+    This decorator validates that the user has the required role and permissions
+    before allowing execution of admin operations.
+    
+    Args:
+        required_role: Minimum required role (e.g., Role.ADMIN)
+        required_permissions: Optional list of specific permissions required
+    
+    Returns:
+        Decorator function
+    
+    Example:
+        >>> @require_role_decorator(Role.ADMIN, [Permission.ADMIN_OPERATIONS])
+        >>> def admin_operation(auth: AuthContext, **kwargs):
+        >>>     return {"success": True}
+    """
+    from functools import wraps
+    
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Extract auth context from kwargs
+            auth = kwargs.get('auth')
+            
+            if not auth:
+                raise AuthenticationError(
+                    "Authentication required for this operation",
+                    details={"operation": func.__name__}
+                )
+            
+            # Check role requirement
+            if auth.role.value != required_role.value:
+                # Admin has access to everything
+                if auth.role != Role.ADMIN:
+                    raise AuthorizationError(
+                        f"Operation requires {required_role.value} role or higher",
+                        details={
+                            "operation": func.__name__,
+                            "required_role": required_role.value,
+                            "user_role": auth.role.value,
+                            "user_id": auth.user_id
+                        }
+                    )
+            
+            # Check specific permissions if provided
+            if required_permissions:
+                for permission in required_permissions:
+                    if not auth.has_permission(permission):
+                        raise AuthorizationError(
+                            f"Missing required permission: {permission.value}",
+                            required_permission=permission.value,
+                            details={
+                                "operation": func.__name__,
+                                "user_id": auth.user_id,
+                                "user_role": auth.role.value
+                            }
+                        )
+            
+            # All checks passed, execute function
+            return func(*args, **kwargs)
+        
+        return wrapper
+    return decorator
+
+
+def require_admin_role(func):
+    """
+    Decorator that requires admin role for function execution.
+    
+    Convenience decorator for operations requiring admin privileges.
+    
+    Args:
+        func: Function to wrap
+    
+    Returns:
+        Wrapped function with admin role check
+    
+    Example:
+        >>> @require_admin_role
+        >>> def delete_all_data(auth: AuthContext):
+        >>>     return {"deleted": True}
+    """
+    return require_role_decorator(
+        required_role=Role.ADMIN,
+        required_permissions=[Permission.ADMIN_OPERATIONS]
+    )(func)
+
