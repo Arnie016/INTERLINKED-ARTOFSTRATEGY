@@ -1,0 +1,37 @@
+Strands Agents - Documentation Structure
+=========================================
+
+Root Level (2 files)
+├── README.md                           # Main project README
+└── DOCS_REORGANIZATION.md              # This reorganization summary
+
+Documentation (docs/)
+├── README.md                           # 📚 Documentation index & navigation guide
+│
+├── guides/                             # 🚀 Getting Started Guides
+│   ├── quick-start.md                  # Quick start guide
+│   ├── aws-setup.md                    # AWS credentials setup  
+│   └── neo4j-setup.md                  # Neo4j configuration
+│
+├── architecture/                       # 🏗️ Architecture & Design
+│   ├── overview.md                     # System architecture overview
+│   └── integration.md                  # Integration patterns & utilities
+│
+└── implementation/                     # 🔧 Implementation Details
+    ├── agents.md                       # Agent implementation summary
+    ├── utilities.md                    # Utilities implementation summary
+    └── setup.md                        # Project setup summary
+
+Source Code Documentation (src/)
+├── config/
+│   └── README.md                       # ⚙️ Configuration module docs
+└── utils/
+    └── README.md                       # 🛠️ Utilities module docs
+
+Testing (tests/)
+└── README.md                           # ✅ Testing guide
+
+Total: 14 markdown files
+=========================================
+
+
