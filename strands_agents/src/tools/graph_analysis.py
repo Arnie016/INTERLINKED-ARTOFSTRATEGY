@@ -152,7 +152,7 @@ def get_graph_snapshot(
                 properties: properties(node)
             }}] as all_nodes,
             [r IN rels | {{
-                id: id(r),
+                id: elementId(r),
                 type: type(r),
                 properties: properties(r),
                 start_id: id(startNode(r)),
@@ -595,7 +595,7 @@ def centrality_analysis(
             ORDER BY degree_centrality DESC
             LIMIT $limit
             WITH collect({{
-                id: id(n),
+                id: elementId(n),
                 labels: labels(n),
                 properties: properties(n),
                 centrality_score: degree_centrality
@@ -629,7 +629,7 @@ def centrality_analysis(
             ORDER BY closeness_centrality DESC
             LIMIT $limit
             WITH collect({{
-                id: id(n),
+                id: elementId(n),
                 labels: labels(n),
                 properties: properties(n),
                 centrality_score: closeness_centrality
@@ -658,7 +658,7 @@ def centrality_analysis(
             ORDER BY betweenness_centrality DESC
             LIMIT $limit
             WITH collect({{
-                id: id(n),
+                id: elementId(n),
                 labels: labels(n),
                 properties: properties(n),
                 centrality_score: betweenness_centrality
@@ -689,7 +689,7 @@ def centrality_analysis(
             ORDER BY pagerank_score DESC
             LIMIT $limit
             WITH collect({{
-                id: id(n),
+                id: elementId(n),
                 labels: labels(n),
                 properties: properties(n),
                 centrality_score: pagerank_score
@@ -961,7 +961,7 @@ def community_detection(
             LIMIT $max_communities
             RETURN collect({{
                 nodes: [n IN component_nodes | {{
-                    id: id(n),
+                    id: elementId(n),
                     labels: labels(n),
                     properties: properties(n)
                 }}],
@@ -1021,7 +1021,7 @@ def community_detection(
                  [n IN nodes_with_degrees WHERE n.degree = max_degree | n.node][0] as central_node
             RETURN collect({{
                 nodes: [n IN community_nodes | {{
-                    id: id(n),
+                    id: elementId(n),
                     labels: labels(n),
                     properties: properties(n)
                 }}],
@@ -1043,7 +1043,7 @@ def community_detection(
             WITH n
             LIMIT 500
             // Initialize each node with its own ID as label
-            WITH n, id(n) as initial_label
+            WITH n, elementId(n) as initial_label
             // Find neighbors and their labels
             MATCH (n)--(neighbor{node_filter})
             WITH n, initial_label, collect(DISTINCT neighbor) as neighbors
@@ -1073,7 +1073,7 @@ def community_detection(
                  [n IN nodes_with_degrees WHERE n.degree = max_degree | n.node][0] as central_node
             RETURN collect({{
                 nodes: [n IN community_nodes | {{
-                    id: id(n),
+                    id: elementId(n),
                     labels: labels(n),
                     properties: properties(n)
                 }}],
@@ -1523,7 +1523,7 @@ def graph_stats(
             CALL {{
                 WITH n
                 MATCH path = (n)-[{rel_filter}*]-(m{node_filter})
-                RETURN collect(DISTINCT id(m)) + [id(n)] as component
+                RETURN collect(DISTINCT elementId(m)) + [elementId(n)] as component
             }}
             WITH DISTINCT component
             RETURN count(*) as num_components, max(size(component)) as largest_size
@@ -1555,7 +1555,7 @@ def graph_stats(
                 WITH n
                 ORDER BY rand()
                 LIMIT $sample_size
-                RETURN collect(id(n)) as sample_ids
+                RETURN collect(elementId(n)) as sample_ids
                 """
                 
                 result = session.run(sample_query, {"sample_size": min(sample_size, total_nodes)})
@@ -1566,7 +1566,7 @@ def graph_stats(
                 clustering_query = f"""
                 UNWIND $sample_ids as node_id
                 MATCH (n{node_filter})
-                WHERE id(n) = node_id
+                WHERE elementId(n) = node_id
                 OPTIONAL MATCH (n)-[{rel_filter}]-(neighbor{node_filter})
                 WITH n, collect(DISTINCT neighbor) as neighbors, count(DISTINCT neighbor) as degree
                 WHERE degree >= 2

@@ -1,20 +1,25 @@
 """
-Orchestrator Agent - Main entry point using the "Agents as Tools" pattern.
+Orchestrator Agent - Simple local deployment without AgentCore dependencies.
 
-This agent routes user queries to specialized agents based on intent detection,
-integrating their responses to provide comprehensive answers to complex questions.
+This provides a basic orchestrator for non-AgentCore deployments (local testing,
+simple FastAPI servers, etc.). For production deployments with AgentCore Memory
+and Runtime, use orchestrator_agent_agentcore.py instead.
 """
 
 from strands import Agent
 from strands.models import BedrockModel
 from typing import Dict, Any, Optional
 import os
+import logging
 
 # Import specialized agent tools
 from .graph_agent import graph_agent
 from .analyzer_agent import analyzer_agent
 from .extractor_agent import extractor_agent
 from .admin_agent import admin_agent
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 # System prompt for the Orchestrator Agent
@@ -87,10 +92,11 @@ def create_orchestrator_agent(
     custom_model_config: Optional[Dict[str, Any]] = None
 ) -> Agent:
     """
-    Create the Orchestrator Agent with access to all specialized agents.
+    Create a simple Orchestrator Agent for local/non-AgentCore deployments.
     
-    This agent intelligently routes user queries to the appropriate
-    specialized agent(s) and integrates their responses.
+    This creates a basic Strands Agent without AgentCore dependencies.
+    For production deployments with AgentCore Memory and Runtime, use
+    create_orchestrator_with_agentcore() from orchestrator_agent_agentcore.py instead.
     
     Args:
         user_role: The role of the user ('user', 'extractor', 'admin').
@@ -104,12 +110,12 @@ def create_orchestrator_agent(
         ```python
         from strands_agents.src.agents.orchestrator_agent import create_orchestrator_agent
         
-        # Create orchestrator for a regular user
+        # Create orchestrator for local testing
         orchestrator = create_orchestrator_agent(user_role="user")
         
-        # Process a complex query
+        # Process a query
         response = orchestrator(
-            "Who are the most central people in Engineering, and what processes do they own?"
+            "Who are the most central people in Engineering?"
         )
         print(response)
         ```
@@ -126,7 +132,7 @@ def create_orchestrator_agent(
     # Create model with custom config or defaults
     model_config = custom_model_config or {}
     model = BedrockModel(
-        model_id=model_config.get("model_id", "anthropic.claude-3-5-sonnet-20241022-v2:0"),
+        model_id=model_config.get("model_id", "anthropic.claude-3-5-sonnet-20240620-v1:0"),
         temperature=model_config.get("temperature", 0.5),  # Moderate temperature for reasoning
         max_tokens=model_config.get("max_tokens", 4096),
         top_p=model_config.get("top_p", None),

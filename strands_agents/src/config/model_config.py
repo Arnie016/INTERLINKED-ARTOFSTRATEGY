@@ -59,7 +59,7 @@ class ModelConfig:
 
 # High-quality reasoning for complex tasks
 REASONING_MODEL = ModelConfig(
-    model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
     max_tokens=4096,
     temperature=0.7,
     top_p=0.9,
@@ -86,7 +86,7 @@ CREATIVE_MODEL = ModelConfig(
 
 # Precise, deterministic responses
 PRECISE_MODEL = ModelConfig(
-    model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
     max_tokens=4096,
     temperature=0.1,
     top_p=0.9,
@@ -100,35 +100,35 @@ PRECISE_MODEL = ModelConfig(
 
 AGENT_MODEL_CONFIGS: Dict[AgentName, ModelConfig] = {
     AgentName.ORCHESTRATOR: ModelConfig(
-        model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
         max_tokens=4096,
         temperature=0.5,  # More deterministic for routing
         top_p=0.9
     ),
     
     AgentName.GRAPH: ModelConfig(
-        model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
         max_tokens=4096,
         temperature=0.3,  # Precise for query generation
         top_p=0.9
     ),
     
     AgentName.ANALYZER: ModelConfig(
-        model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
         max_tokens=4096,
         temperature=0.7,  # Balanced for analysis
         top_p=0.9
     ),
     
     AgentName.EXTRACTOR: ModelConfig(
-        model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
         max_tokens=4096,
         temperature=0.4,  # Precise for data extraction
         top_p=0.9
     ),
     
     AgentName.ADMIN: ModelConfig(
-        model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
         max_tokens=2048,
         temperature=0.2,  # Very precise for admin operations
         top_p=0.9
@@ -157,7 +157,7 @@ def get_model_config(
     Example:
         >>> config = get_model_config(AgentName.GRAPH)
         >>> config.model_id
-        'anthropic.claude-3-5-sonnet-20241022-v2:0'
+        'anthropic.claude-3-5-sonnet-20240620-v1:0'
     """
     # Get base config for agent
     config = AGENT_MODEL_CONFIGS.get(agent_name, REASONING_MODEL)
@@ -223,7 +223,7 @@ def get_model_config_from_yaml(config_dict: Dict[str, Any]) -> ModelConfig:
     
     Example:
         >>> yaml_config = {
-        ...     "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+        ...     "model": "anthropic.claude-3-5-sonnet-20240620-v1:0",
         ...     "max_tokens": 4096
         ... }
         >>> config = get_model_config_from_yaml(yaml_config)
