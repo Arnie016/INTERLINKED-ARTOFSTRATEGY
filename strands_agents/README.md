@@ -1,207 +1,214 @@
-# Strands Agents for Organizational Graph Analysis
+# Interactive Chat Interface for Organizational Graph Analysis
 
-A multi-agent system built with AWS Bedrock and Strands Agents SDK for analyzing organizational graph data stored in Neo4j.
+A powerful chat interface that allows you to interact with AI agents to analyze your organizational graph data stored in Neo4j. Ask questions about your organization's structure, people, projects, and relationships in natural language.
 
-## Architecture
+## 🚀 Quick Start - Chat Interface
 
-This project implements the **"Agents as Tools"** pattern with specialized agents orchestrated by a main coordinator.
-
-For detailed architecture information, see:
-- 📐 [Architecture Overview](docs/architecture/overview.md) - Complete architecture documentation
-- 🔗 [Integration Guide](docs/architecture/integration.md) - Integration patterns and utilities
-
-### Quick Overview
-
-```
-OrchestratorAgent (Main Entry Point)
-├── GraphAgent (Read-only queries and search)
-├── AnalyzerAgent (Advanced analytics and insights)
-├── ExtractorAgent (Data ingestion and writes)
-└── AdminAgent (Privileged admin operations)
-```
-
-## Getting Started
-
-For detailed setup instructions, see our comprehensive guides:
-
-- 🚀 [Quick Start Guide](docs/guides/quick-start.md) - Get up and running in minutes
-- ☁️ [AWS Setup Guide](docs/guides/aws-setup.md) - Configure AWS credentials and Bedrock
-- 🗄️ [Neo4j Setup Guide](docs/guides/neo4j-setup.md) - Configure Neo4j connection
-
-### Quick Install
+The easiest way to interact with your organizational data is through the interactive chat interface:
 
 ```bash
-# Clone and navigate to project
+# Navigate to the project directory
 cd strands_agents
 
-# Run automated setup
-./setup.sh
-
-# Configure environment
-cp env.template .env
-# Edit .env with your credentials
+# Start the chat interface
+python chat.py
 ```
 
-## CLI Testing
+That's it! You'll see a chat interface where you can ask questions about your organizational data.
 
-Test the orchestrator agent via command line interface in development or production:
+## 💬 What You Can Do
 
-### Quick Test (5 minutes)
-```bash
-./run_cli_tests.sh --interactive
-```
+Once the chat interface is running, you can:
 
-### Full Testing Documentation
-- 🎯 [CLI Quick Start](CLI_QUICKSTART.md) - Get testing in 5 minutes
-- 📋 [Complete Walkthrough](WALKTHROUGH.md) - Step-by-step guide with exact commands
-- 📚 [CLI Testing Guide](docs/guides/CLI_TESTING_GUIDE.md) - Comprehensive testing scenarios
-- 🛠️ [CLI Testing README](CLI_TESTING_README.md) - Documentation index
+### Ask Questions About Your Organization
+- **"What departments exist in our organization?"**
+- **"Who are the key people in Sales?"**
+- **"What projects are currently active?"**
+- **"How is our organizational structure organized?"**
+- **"What systems do we use?"**
 
-### Automated Testing
-```bash
-# Local testing
-./run_cli_tests.sh --local
+### Switch Between Different AI Agents
+- **Neo4j Agent** (default) - Intelligent analysis of your organizational data
+- **Query Agent** - General purpose AI assistant
+- **Neo4j Tool** - Direct database queries
 
-# AgentCore deployment testing
-./run_cli_tests.sh --agentcore
+### Use Built-in Commands
+- `help` - Show all available commands
+- `stats` - Display database statistics
+- `schema` - Show your data structure
+- `clear` - Clear the screen
+- `quit` - Exit the chat
 
-# All tests
-./run_cli_tests.sh --all
-```
+## 🔑 Prerequisites
 
-See [CLI Testing README](CLI_TESTING_README.md) for complete documentation.
+Before you can use the chat interface, you need to set up your credentials:
 
-## Usage
+### 1. Neo4j Database Access
+You need access to a Neo4j database with your organizational data. This can be:
+- **Neo4j AuraDB** (cloud) - Recommended for easy setup
+- **Neo4j Desktop** (local) - For local development
+- **Self-hosted Neo4j** - For enterprise deployments
 
-### Basic Usage with Orchestrator
+### 2. Required Credentials
 
-```python
-from strands_agents.src.agents import create_orchestrator_agent
-
-# Create orchestrator for a regular user
-orchestrator = create_orchestrator_agent(user_role="user")
-
-# Ask a question
-response = orchestrator("Who are the most influential people in Engineering?")
-print(response)
-
-# Complex multi-agent query
-response = orchestrator(
-    "Find all bottlenecks in our processes and suggest who should own each one"
-)
-print(response)
-```
-
-### Using Specialized Agents Directly
-
-```python
-from strands_agents.src.agents import (
-    create_graph_agent,
-    create_analyzer_agent,
-    create_extractor_agent
-)
-
-# Graph Agent for searches
-graph_agent = create_graph_agent()
-response = graph_agent("Find all people in the Data department")
-print(response)
-
-# Analyzer Agent for analytics
-analyzer_agent = create_analyzer_agent()
-response = analyzer_agent("Detect communities in our organization")
-print(response)
-
-# Extractor Agent for data ingestion (requires appropriate role)
-extractor_agent = create_extractor_agent()
-response = extractor_agent(
-    "Create a new person: Alice Johnson, Senior Engineer, Data team"
-)
-print(response)
-```
-
-### Convenience Function
-
-```python
-from strands_agents.src.agents import process_query
-
-# Simple one-line query processing
-response = process_query(
-    "What processes does the Engineering department own?",
-    user_role="user"
-)
-print(response)
-```
-
-## Configuration
-
-Configuration is managed through environment variables and YAML files.
-
-For detailed configuration information:
-- [Configuration Module](src/config/README.md) - Configuration system details
-- [Utilities Module](src/utils/README.md) - Shared utilities and helpers
-
-### Quick Configuration
-
-```python
-from strands_agents.src.agents import create_orchestrator_agent
-
-# Create with default configuration
-orchestrator = create_orchestrator_agent(user_role="user")
-
-# Or customize model settings
-custom_config = {
-    "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
-    "temperature": 0.3
-}
-orchestrator = create_orchestrator_agent(
-    user_role="user",
-    custom_model_config=custom_config
-)
-```
-
-## Documentation
-
-Comprehensive documentation is organized by topic:
-
-### 📚 Guides (Getting Started)
-- [Quick Start](docs/guides/quick-start.md) - Get up and running
-- [AWS Setup](docs/guides/aws-setup.md) - Configure AWS credentials
-- [Neo4j Setup](docs/guides/neo4j-setup.md) - Configure database connection
-
-### 🏗️ Architecture (Technical Details)
-- [Architecture Overview](docs/architecture/overview.md) - System architecture
-- [Integration Guide](docs/architecture/integration.md) - Integration patterns
-
-### 🔧 Implementation (Development)
-- [Agent Implementation](docs/implementation/agents.md) - Agent implementation details
-- [Utilities Implementation](docs/implementation/utilities.md) - Shared utilities
-- [Setup Details](docs/implementation/setup.md) - Project setup summary
-
-### 📖 Module Documentation
-- [Configuration](src/config/README.md) - Configuration management
-- [Utilities](src/utils/README.md) - Shared utilities and helpers
-- [Testing](tests/README.md) - Testing guide and best practices
-
-## Testing
+#### Neo4j Credentials
+Create a `.env` file in the `src/` directory with your Neo4j connection details:
 
 ```bash
-# Run all tests
-cd strands_agents
-python -m pytest tests/ -v
+# Neo4j Connection (Required)
+NEO4J_URI=neo4j+s://your-instance.databases.neo4j.io
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=your_neo4j_password
+NEO4J_DATABASE=neo4j
 
-# Run with coverage
-python -m pytest tests/ --cov=src --cov-report=html
-
-# Run specific tests
-python -m pytest tests/test_agents_basic.py -v
+# Optional: Instance information
+AURA_INSTANCEID=your-instance-id
+AURA_INSTANCENAME=your-instance-name
 ```
 
-See the [Testing Guide](tests/README.md) for more details.
+#### AWS Credentials
+The system uses AWS Bedrock for AI capabilities. Set up your AWS credentials:
 
-## License
+```bash
+# Option 1: AWS CLI (Recommended)
+aws configure
 
-See main project LICENSE file.
+# Option 2: Environment Variables
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_key
+export AWS_REGION=your_region
+```
 
-## Support
+## 🛠️ Installation
 
-For issues or questions, please contact the development team or create an issue in the project repository.
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd strands_agents
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set up your credentials** (see Prerequisites above)
+
+4. **Start chatting:**
+   ```bash
+   python chat.py
+   ```
+
+## 🎯 Why Use This Chat Interface?
+
+### For Business Users
+- **Natural Language Queries** - Ask questions in plain English
+- **No Technical Knowledge Required** - No need to learn Cypher or database queries
+- **Instant Insights** - Get immediate answers about your organization
+- **Interactive Exploration** - Discover patterns and relationships through conversation
+
+### For Data Analysts
+- **Rapid Prototyping** - Quickly explore organizational data
+- **Pattern Discovery** - Find unexpected relationships and insights
+- **Data Validation** - Verify data quality through natural language queries
+- **Report Generation** - Get structured answers for reports and presentations
+
+### For IT Administrators
+- **System Monitoring** - Check database health and statistics
+- **Schema Exploration** - Understand your data structure
+- **Troubleshooting** - Diagnose data issues through conversation
+- **Documentation** - Generate documentation from your actual data
+
+## 🔧 Advanced Usage
+
+### Direct File Execution
+```bash
+# Run the chat interface directly
+python src/llm_interface/chat.py
+```
+
+### Programmatic Usage
+```python
+from src.agents.neo4j_agent import Neo4jAgent
+
+# Create an agent instance
+agent = Neo4jAgent()
+
+# Ask questions programmatically
+response = agent.query("What departments exist?")
+print(response)
+```
+
+## 📊 Example Conversations
+
+### Exploring Organizational Structure
+```
+🤖 Neo4j Agent > What types of entities exist in our database?
+🤖 Neo4j Agent > What are the main organizational units?
+🤖 Neo4j Agent > How are departments structured?
+```
+
+### Analyzing People and Roles
+```
+🤖 Neo4j Agent > Who are the key individuals in our organization?
+🤖 Neo4j Agent > What roles exist in the Sales department?
+🤖 Neo4j Agent > Who reports to whom?
+```
+
+### Project and Process Analysis
+```
+🤖 Neo4j Agent > What projects are currently active?
+🤖 Neo4j Agent > What processes do we have?
+🤖 Neo4j Agent > Which systems support our operations?
+```
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+**"Failed to connect to Neo4j"**
+- Check your Neo4j credentials in the `.env` file
+- Verify your Neo4j instance is running
+- Ensure your IP is whitelisted (for AuraDB)
+
+**"AWS credentials not found"**
+- Run `aws configure` to set up AWS credentials
+- Or set AWS environment variables
+- Ensure you have Bedrock access in your AWS account
+
+**"No data found"**
+- Verify your Neo4j database contains organizational data
+- Check that your data has proper node labels and relationships
+- Try the `stats` command to see what's in your database
+
+### Getting Help
+- Use the `help` command in the chat interface
+- Check the `stats` and `schema` commands to understand your data
+- Ensure your credentials are properly configured
+
+## 🔒 Security Notes
+
+- Keep your `.env` file secure and never commit it to version control
+- Use environment variables for production deployments
+- Ensure your Neo4j database has proper access controls
+- AWS credentials should follow least-privilege principles
+
+## 📈 What's Next?
+
+Once you're comfortable with the chat interface, you can:
+- Explore the underlying agent architecture
+- Customize the AI prompts for your specific needs
+- Integrate the agents into your own applications
+- Build custom tools for your organizational data
+
+## 🤝 Support
+
+For issues or questions:
+1. Check the troubleshooting section above
+2. Verify your credentials and database connection
+3. Try the built-in help commands
+4. Contact the development team for advanced support
+
+---
+
+**Ready to explore your organizational data? Run `python chat.py` and start asking questions!** 🚀
