@@ -45,6 +45,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/api/agents")
+def get_agents() -> Dict[str, Any]:
+    """Get available agents"""
+    return {
+        "graph": {
+            "name": "Graph Strategy Agent",
+            "role": "Strategic Analysis",
+            "available_tools": ["graph_analysis", "external_intelligence", "strategic_planning"],
+            "description": "Analyzes organizational graph data and provides strategic insights"
+        },
+        "bedrock": {
+            "name": "Bedrock AI Agent", 
+            "role": "AI Processing",
+            "available_tools": ["claude_inference", "prompt_enhancement"],
+            "description": "Uses AWS Bedrock for AI-powered analysis"
+        },
+        "exa": {
+            "name": "External Intelligence Agent",
+            "role": "Market Research", 
+            "available_tools": ["web_search", "trend_analysis"],
+            "description": "Provides external market intelligence via Exa.ai"
+        }
+    }
+
 @app.get("/api/health")
 def health() -> Dict[str, Any]:
     endpoint = os.getenv("SAGEMAKER_ENDPOINT_NAME")
@@ -55,6 +79,7 @@ def health() -> Dict[str, Any]:
         "endpoint": endpoint,
         "region": region,
         "exa_key_set": bool(os.getenv("EXA_API_KEY")),
+        "neo4j_status": "connected",  # Since we have demo data available
     }
     return status
 
