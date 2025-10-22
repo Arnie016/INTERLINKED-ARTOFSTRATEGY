@@ -66,14 +66,14 @@
 5. **Structured Output**: XML-tagged strategic analysis and action plan
 
 **Demo Quality:**
-- **Live Deployment**: [https://orgmind-ai.vercel.app](https://orgmind-ai.vercel.app)
+- **Live Deployment**: [https://interlinked-artofstrategy-main-8zuydg16w.vercel.app](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)
 - **Interactive Interface**: Real-time graph visualization
 - **Real-time Responses**: Immediate strategic analysis
 - **Professional UI**: Clean, modern interface
 
 ## **🚀 Live Demo**
 
-**URL**: [https://orgmind-ai.vercel.app](https://orgmind-ai.vercel.app)
+**URL**: [https://interlinked-artofstrategy-main-8zuydg16w.vercel.app](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)
 
 **Try it**: Ask "How can we reduce Engineering delivery time by 30%?" and watch the AI analyze your organizational graph while pulling relevant external insights.
 

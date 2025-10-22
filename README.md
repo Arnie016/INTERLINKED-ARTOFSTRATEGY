@@ -4,7 +4,7 @@
 
 A production-ready AI platform that combines organizational graph data with external market intelligence to deliver actionable strategic insights. Built for AWS Hackathon 2024.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-blue)](https://orgmind-ai.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-blue)](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)
 [![AWS Bedrock](https://img.shields.io/badge/AWS-Bedrock-orange)](https://aws.amazon.com/bedrock/)
 [![Exa.ai](https://img.shields.io/badge/External%20Data-Exa.ai-green)](https://exa.ai/)
 
@@ -34,7 +34,7 @@ A production-ready AI platform that combines organizational graph data with exte
 
 ## 🚀 **Live Demo**
 
-**🔗 [Try OrgMind AI Now](https://orgmind-ai.vercel.app)**
+**🔗 [Try OrgMind AI Now](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)**
 
 **Example Query**: *"How can we reduce Engineering delivery time by 30%?"*
 
@@ -118,7 +118,7 @@ A production-ready AI platform that combines organizational graph data with exte
 ### **Installation**
 
 1. **Clone the repository**
-   ```bash
+```bash
    git clone https://github.com/yourusername/orgmind-ai.git
    cd orgmind-ai
    ```
@@ -126,7 +126,7 @@ A production-ready AI platform that combines organizational graph data with exte
 2. **Install dependencies**
    ```bash
    # Frontend
-   cd frontend && npm install
+cd frontend && npm install
    
    # Backend
    cd ../backend && pip install -r requirements.txt
@@ -142,17 +142,179 @@ A production-ready AI platform that combines organizational graph data with exte
    ```
 
 4. **Start the services**
-   ```bash
+```bash
    # Terminal 1: Backend
    cd backend && python -m api.server
-   
+
    # Terminal 2: Frontend
-   cd frontend && npm run dev
-   ```
+cd frontend && npm run dev
+```
 
 5. **Open the application**
    - Frontend: `http://localhost:3000`
    - Backend API: `http://localhost:8000/api/health`
+
+## 🧪 **Testing Instructions**
+
+### **Live Deployment Testing**
+
+**🔗 [Test Live Application](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)**
+
+#### **1. Basic Functionality Tests**
+
+**Test 1: Health Check**
+- Navigate to: `https://interlinked-artofstrategy-main-8zuydg16w.vercel.app/api/health`
+- Expected: `{"status": "ok", "timestamp": "..."}`
+
+**Test 2: Graph Context**
+- Navigate to: `https://interlinked-artofstrategy-main-8zuydg16w.vercel.app/api/graph-context`
+- Expected: JSON with nodes and edges from organizational graph
+
+**Test 3: Strategy Query**
+- Use the web interface to ask: *"How can we reduce Engineering delivery time by 30%?"*
+- Expected: Structured response with strategic analysis and action plan
+
+#### **2. Feature-Specific Tests**
+
+**Graph Visualization Test**
+- Query: *"What are the key bottlenecks in our development process?"*
+- Verify: Graph displays with nodes and relationships
+- Check: Legend shows different node types (Person, Process, Department)
+
+**External Intelligence Test**
+- Query: *"What are the latest trends in DevOps automation?"*
+- Verify: External links appear in response
+- Check: Links are relevant and properly formatted
+
+**Structured Output Test**
+- Query: *"How can we improve customer satisfaction?"*
+- Verify: Response contains `<strategic_analysis>` and `<action_plan>` sections
+- Check: Action plan includes specific owners, budgets, and timelines
+
+#### **3. Error Handling Tests**
+
+**Invalid Query Test**
+- Query: *"asdfghjkl"*
+- Expected: Graceful error message, no crash
+
+**Network Failure Test**
+- Disable internet temporarily
+- Query: *"Test query"*
+- Expected: Fallback response without external intelligence
+
+#### **4. Performance Tests**
+
+**Response Time Test**
+- Measure time from query submission to response
+- Expected: < 10 seconds for complex queries
+
+**Concurrent Users Test**
+- Open multiple browser tabs
+- Submit queries simultaneously
+- Expected: All queries processed successfully
+
+### **Local Development Testing**
+
+#### **Backend API Tests**
+
+```bash
+# Health check
+curl http://localhost:8000/api/health
+
+# Graph context
+curl http://localhost:8000/api/graph-context
+
+# Strategy query
+curl -X POST http://localhost:8000/api/strategy \
+  -H "Content-Type: application/json" \
+  -d '{"query": "How can we reduce Engineering delivery time by 30%?"}'
+```
+
+#### **Frontend Tests**
+
+```bash
+# Start frontend
+cd frontend && npm run dev
+
+# Test in browser
+open http://localhost:3000
+
+# Run linting
+npm run lint
+
+# Run type checking
+npm run type-check
+```
+
+#### **Integration Tests**
+
+```bash
+# Test Exa.ai integration
+python -c "
+from backend.api.services.exa_client import exa_search
+result = exa_search('DevOps automation trends 2024')
+print(f'Found {len(result)} results')
+"
+
+# Test Bedrock integration
+python -c "
+from backend.api.services.sagemaker_client import invoke_bedrock_fallback
+result = invoke_bedrock_fallback('Test query')
+print(f'Response length: {len(result)}')
+"
+```
+
+### **Expected Test Results**
+
+#### **✅ Successful Test Indicators**
+
+- **Health Check**: Returns `{"status": "ok"}`
+- **Graph Context**: Returns 11+ nodes, 18+ relationships
+- **Strategy Query**: Returns structured XML with analysis and action plan
+- **External Links**: 3-5 relevant external sources per query
+- **Response Time**: < 10 seconds average
+- **Error Handling**: Graceful degradation, no crashes
+
+#### **⚠️ Known Limitations**
+
+- **Exa.ai Rate Limits**: May return empty results if quota exceeded
+- **Bedrock Latency**: First request may take longer due to cold start
+- **Graph Size**: Limited to 25 nodes for performance
+
+### **Troubleshooting**
+
+#### **Common Issues**
+
+**Issue**: "Backend Not Connected"
+- **Solution**: Check if backend is running on port 8000
+- **Command**: `curl http://localhost:8000/api/health`
+
+**Issue**: "No external links found"
+- **Solution**: Check EXA_API_KEY environment variable
+- **Command**: `echo $EXA_API_KEY`
+
+**Issue**: "Graph not loading"
+- **Solution**: Check Neo4j connection
+- **Command**: `curl http://localhost:8000/api/graph-context`
+
+**Issue**: "Slow responses"
+- **Solution**: Check AWS region configuration
+- **Command**: `echo $AWS_REGION`
+
+#### **Debug Commands**
+
+```bash
+# Check all services
+curl http://localhost:8000/api/health
+curl http://localhost:3000/api/health
+
+# Test individual components
+python -c "from backend.api.services.exa_client import exa_search; print(exa_search('test'))"
+python -c "from backend.api.services.sagemaker_client import invoke_bedrock_fallback; print(invoke_bedrock_fallback('test'))"
+
+# Check logs
+tail -f backend/logs/app.log
+```
 
 ## 🏆 **Hackathon Judging Criteria**
 
@@ -206,4 +368,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built for AWS Hackathon 2024** 🚀
 
-**Live Demo**: [https://orgmind-ai.vercel.app](https://orgmind-ai.vercel.app)
+**Live Demo**: [https://interlinked-artofstrategy-main-8zuydg16w.vercel.app](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)
