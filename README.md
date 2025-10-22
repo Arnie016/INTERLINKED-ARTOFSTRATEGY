@@ -4,7 +4,7 @@
 
 A production-ready AI platform that combines organizational graph data with external market intelligence to deliver actionable strategic insights. Built for AWS Hackathon 2024.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-blue)](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-blue)](https://interlinked-artofstrategy-main.vercel.app)
 [![AWS Bedrock](https://img.shields.io/badge/AWS-Bedrock-orange)](https://aws.amazon.com/bedrock/)
 [![Exa.ai](https://img.shields.io/badge/External%20Data-Exa.ai-green)](https://exa.ai/)
 
@@ -34,7 +34,7 @@ A production-ready AI platform that combines organizational graph data with exte
 
 ## 🚀 **Live Demo**
 
-**🔗 [Try OrgMind AI Now](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)**
+**🔗 [Try OrgMind AI Now](https://interlinked-artofstrategy-main.vercel.app)**
 
 **Example Query**: *"How can we reduce Engineering delivery time by 30%?"*
 
@@ -158,16 +158,16 @@ cd frontend && npm run dev
 
 ### **Live Deployment Testing**
 
-**🔗 [Test Live Application](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)**
+**🔗 [Test Live Application](https://interlinked-artofstrategy-main.vercel.app)**
 
 #### **1. Basic Functionality Tests**
 
 **Test 1: Health Check**
-- Navigate to: `https://interlinked-artofstrategy-main-8zuydg16w.vercel.app/api/health`
+- Navigate to: `https://interlinked-artofstrategy-main.vercel.app/api/health`
 - Expected: `{"status": "ok", "timestamp": "..."}`
 
 **Test 2: Graph Context**
-- Navigate to: `https://interlinked-artofstrategy-main-8zuydg16w.vercel.app/api/graph-context`
+- Navigate to: `https://interlinked-artofstrategy-main.vercel.app/api/graph-context`
 - Expected: JSON with nodes and edges from organizational graph
 
 **Test 3: Strategy Query**
@@ -368,4 +368,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built for AWS Hackathon 2024** 🚀
 
-**Live Demo**: [https://interlinked-artofstrategy-main-8zuydg16w.vercel.app](https://interlinked-artofstrategy-main-8zuydg16w.vercel.app)
+**Live Demo**: [https://interlinked-artofstrategy-main.vercel.app](https://interlinked-artofstrategy-main.vercel.app)

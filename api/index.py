@@ -62,8 +62,8 @@ def health() -> Dict[str, Any]:
 def graph_context() -> Dict[str, Any]:
     """Get organizational graph context"""
     try:
-        graph_data = get_graph_context()
-        return graph_data
+        graph_data = get_graph_context("organizational structure", 25)
+        return graph_data[1]  # Return the dict part, not the summary
     except Exception as e:
         return {"error": str(e), "nodes": [], "edges": []}
 
@@ -72,8 +72,9 @@ def strategy(request: StrategyRequest) -> Dict[str, Any]:
     """Generate strategic analysis"""
     try:
         # Get graph context
-        graph_data = get_graph_context()
-        graph_summary = f"Organizational graph with {len(graph_data.get('nodes', []))} nodes and {len(graph_data.get('edges', []))} relationships"
+        graph_data = get_graph_context(request.query, request.maxNodes)
+        graph_summary = graph_data[0]  # Get the summary string
+        graph_dict = graph_data[1]  # Get the dict with nodes and edges
         
         # Get external intelligence if requested
         exa_snippets = []
@@ -101,7 +102,7 @@ def strategy(request: StrategyRequest) -> Dict[str, Any]:
             "text": result["text"],
             "source": result["source"],
             "links": exa_snippets,
-            "graph": graph_data
+            "graph": graph_dict
         }
         
     except Exception as e:
