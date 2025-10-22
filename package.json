@@ -1,0 +1,14 @@
+{
+  "name": "orgmind-ai",
+  "version": "1.0.0",
+  "description": "Graph-Aware AI Strategy Agent with External Intelligence Integration",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start"
+  },
+  "keywords": ["ai", "strategy", "graph", "neo4j", "bedrock", "exa"],
+  "author": "OrgMind AI Team",
+  "license": "MIT"
+}

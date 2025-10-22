@@ -1,0 +1,133 @@
+[
+  {
+    "id": "person-1",
+    "name": "Sarah Chen",
+    "type": "Person",
+    "role": "CEO",
+    "department": "Executive",
+    "location": "San Francisco",
+    "tenure_years": 5.2,
+    "skills": [
+      "Leadership",
+      "Strategy",
+      "Operations"
+    ]
+  },
+  {
+    "id": "person-2",
+    "name": "Mike Rodriguez",
+    "type": "Person",
+    "role": "CTO",
+    "department": "Engineering",
+    "location": "Austin",
+    "tenure_years": 3.8,
+    "skills": [
+      "Architecture",
+      "Python",
+      "AWS",
+      "Team Management"
+    ]
+  },
+  {
+    "id": "person-3",
+    "name": "Lisa Park",
+    "type": "Person",
+    "role": "Head of Sales",
+    "department": "Sales",
+    "location": "New York",
+    "tenure_years": 2.1,
+    "skills": [
+      "Sales Strategy",
+      "CRM",
+      "Customer Relations"
+    ]
+  },
+  {
+    "id": "dept-1",
+    "name": "Engineering",
+    "type": "Department",
+    "budget": 2500000,
+    "headcount": 25,
+    "location": "Austin",
+    "focus": "Product Development"
+  },
+  {
+    "id": "dept-2",
+    "name": "Sales",
+    "type": "Department",
+    "budget": 1200000,
+    "headcount": 12,
+    "location": "New York",
+    "focus": "Revenue Generation"
+  },
+  {
+    "id": "dept-3",
+    "name": "Marketing",
+    "type": "Department",
+    "budget": 800000,
+    "headcount": 8,
+    "location": "San Francisco",
+    "focus": "Brand & Growth"
+  },
+  {
+    "id": "process-1",
+    "name": "Customer Onboarding",
+    "type": "Process",
+    "owner": "Lisa Park",
+    "department": "Sales",
+    "complexity": "medium",
+    "automation_level": "automated",
+    "sla_hours": 24,
+    "frequency": "daily",
+    "participants_count": 5,
+    "status": "active"
+  },
+  {
+    "id": "process-2",
+    "name": "Code Review",
+    "type": "Process",
+    "owner": "Mike Rodriguez",
+    "department": "Engineering",
+    "complexity": "high",
+    "automation_level": "semi-automated",
+    "sla_hours": 4,
+    "frequency": "continuous",
+    "participants_count": 3,
+    "status": "active"
+  },
+  {
+    "id": "process-3",
+    "name": "Lead Qualification",
+    "type": "Process",
+    "owner": "Lisa Park",
+    "department": "Sales",
+    "complexity": "low",
+    "automation_level": "automated",
+    "sla_hours": 2,
+    "frequency": "continuous",
+    "participants_count": 2,
+    "status": "active"
+  },
+  {
+    "id": "project-1",
+    "name": "AI-Powered Analytics Platform",
+    "type": "Project",
+    "owner": "Mike Rodriguez",
+    "department": "Engineering",
+    "budget": 500000,
+    "timeline_months": 12,
+    "status": "in_progress",
+    "priority": "high"
+  },
+  {
+    "id": "project-2",
+    "name": "Customer Success Program",
+    "type": "Project",
+    "owner": "Lisa Park",
+    "department": "Sales",
+    "budget": 200000,
+    "timeline_months": 6,
+    "status": "planning",
+    "priority": "medium"
+  }
+]

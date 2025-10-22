@@ -1,0 +1,92 @@
+[
+  {
+    "source": "person-1",
+    "target": "dept-1",
+    "type": "HEADS"
+  },
+  {
+    "source": "person-2",
+    "target": "dept-1",
+    "type": "HEADS"
+  },
+  {
+    "source": "person-3",
+    "target": "dept-2",
+    "type": "HEADS"
+  },
+  {
+    "source": "person-2",
+    "target": "process-2",
+    "type": "OWNS"
+  },
+  {
+    "source": "person-3",
+    "target": "process-1",
+    "type": "OWNS"
+  },
+  {
+    "source": "person-3",
+    "target": "process-3",
+    "type": "OWNS"
+  },
+  {
+    "source": "person-2",
+    "target": "project-1",
+    "type": "LEADS"
+  },
+  {
+    "source": "person-3",
+    "target": "project-2",
+    "type": "LEADS"
+  },
+  {
+    "source": "process-1",
+    "target": "dept-2",
+    "type": "BELONGS_TO"
+  },
+  {
+    "source": "process-2",
+    "target": "dept-1",
+    "type": "BELONGS_TO"
+  },
+  {
+    "source": "process-3",
+    "target": "dept-2",
+    "type": "BELONGS_TO"
+  },
+  {
+    "source": "project-1",
+    "target": "dept-1",
+    "type": "BELONGS_TO"
+  },
+  {
+    "source": "project-2",
+    "target": "dept-2",
+    "type": "BELONGS_TO"
+  },
+  {
+    "source": "person-1",
+    "target": "person-2",
+    "type": "REPORTS_TO"
+  },
+  {
+    "source": "person-1",
+    "target": "person-3",
+    "type": "REPORTS_TO"
+  },
+  {
+    "source": "person-2",
+    "target": "person-3",
+    "type": "WORKS_WITH"
+  },
+  {
+    "source": "process-3",
+    "target": "process-1",
+    "type": "FEEDS_INTO"
+  },
+  {
+    "source": "process-2",
+    "target": "project-1",
+    "type": "SUPPORTS"
+  }
+]

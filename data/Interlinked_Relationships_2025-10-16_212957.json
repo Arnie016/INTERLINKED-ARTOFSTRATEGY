@@ -1,0 +1,620 @@
+{
+  "reports_to": [
+    {
+      "from": "David Anderson",
+      "to": "Emma White",
+      "type": "REPORTS_TO",
+      "relationship_type": "direct_report",
+      "start_date": "2019-03-08T21:29:57.733436"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Emma White",
+      "type": "REPORTS_TO",
+      "relationship_type": "direct_report",
+      "start_date": "2021-07-12T21:29:57.733468"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Emma White",
+      "type": "REPORTS_TO",
+      "relationship_type": "direct_report",
+      "start_date": "2018-06-25T21:29:57.733487"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Emma White",
+      "type": "REPORTS_TO",
+      "relationship_type": "direct_report",
+      "start_date": "2024-12-03T21:29:57.733523"
+    }
+  ],
+  "works_with": [
+    {
+      "from": "David Anderson",
+      "to": "Nathan Harris",
+      "type": "WORKS_WITH",
+      "collaboration_type": "peer",
+      "frequency": "weekly",
+      "context": "Department: Sales"
+    },
+    {
+      "from": "David Anderson",
+      "to": "Emma Roberts",
+      "type": "WORKS_WITH",
+      "collaboration_type": "peer",
+      "frequency": "weekly",
+      "context": "Department: Sales"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "David Anderson",
+      "type": "WORKS_WITH",
+      "collaboration_type": "peer",
+      "frequency": "monthly",
+      "context": "Department: Sales"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Emma Roberts",
+      "type": "WORKS_WITH",
+      "collaboration_type": "peer",
+      "frequency": "weekly",
+      "context": "Department: Sales"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Nathan Harris",
+      "type": "WORKS_WITH",
+      "collaboration_type": "peer",
+      "frequency": "monthly",
+      "context": "Department: Sales"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "David Anderson",
+      "type": "WORKS_WITH",
+      "collaboration_type": "peer",
+      "frequency": "monthly",
+      "context": "Department: Sales"
+    },
+    {
+      "from": "David Anderson",
+      "to": "Henry Garcia",
+      "type": "WORKS_WITH",
+      "collaboration_type": "cross_department",
+      "frequency": "monthly",
+      "context": "Cross-department collaboration"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Henry Garcia",
+      "type": "WORKS_WITH",
+      "collaboration_type": "cross_department",
+      "frequency": "monthly",
+      "context": "Cross-department collaboration"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Henry Garcia",
+      "type": "WORKS_WITH",
+      "collaboration_type": "cross_department",
+      "frequency": "monthly",
+      "context": "Cross-department collaboration"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Nathan Harris",
+      "type": "WORKS_WITH",
+      "collaboration_type": "cross_department",
+      "frequency": "weekly",
+      "context": "Cross-department collaboration"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "David Anderson",
+      "type": "WORKS_WITH",
+      "collaboration_type": "cross_department",
+      "frequency": "monthly",
+      "context": "Cross-department collaboration"
+    }
+  ],
+  "belongs_to_department": [
+    {
+      "from": "David Anderson",
+      "to": "Sales",
+      "type": "BELONGS_TO",
+      "allocation_percentage": 100,
+      "start_date": "2019-03-08T21:29:57.733436"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Sales",
+      "type": "BELONGS_TO",
+      "allocation_percentage": 100,
+      "start_date": "2021-07-12T21:29:57.733468"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Sales",
+      "type": "BELONGS_TO",
+      "allocation_percentage": 100,
+      "start_date": "2018-06-25T21:29:57.733487"
+    },
+    {
+      "from": "Emma White",
+      "to": "Legal",
+      "type": "BELONGS_TO",
+      "allocation_percentage": 100,
+      "start_date": "2023-07-06T21:29:57.733505"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Legal",
+      "type": "BELONGS_TO",
+      "allocation_percentage": 100,
+      "start_date": "2024-12-03T21:29:57.733523"
+    }
+  ],
+  "assigned_to_project": [
+    {
+      "from": "David Anderson",
+      "to": "Sales Process Optimization",
+      "type": "ASSIGNED_TO",
+      "role": "developer",
+      "allocation_percentage": 100,
+      "start_date": "2019-03-08T21:29:57.733436"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Sales Process Optimization",
+      "type": "ASSIGNED_TO",
+      "role": "coordinator",
+      "allocation_percentage": 80,
+      "start_date": "2021-07-12T21:29:57.733468"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Sales Process Optimization",
+      "type": "ASSIGNED_TO",
+      "role": "reviewer",
+      "allocation_percentage": 50,
+      "start_date": "2018-06-25T21:29:57.733487"
+    },
+    {
+      "from": "Emma White",
+      "to": "Security Infrastructure Upgrade",
+      "type": "ASSIGNED_TO",
+      "role": "coordinator",
+      "allocation_percentage": 100,
+      "start_date": "2023-07-06T21:29:57.733505"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Security Infrastructure Upgrade",
+      "type": "ASSIGNED_TO",
+      "role": "coordinator",
+      "allocation_percentage": 80,
+      "start_date": "2024-12-03T21:29:57.733523"
+    }
+  ],
+  "owns_process": [
+    {
+      "from": "David Anderson",
+      "to": "Lead Qualification",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "David Anderson",
+      "to": "Demo Scheduling",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "David Anderson",
+      "to": "Contract Negotiation",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Deal Review",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Pipeline Management",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Customer Outreach",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Process 7",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Process 8",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Process 9",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Emma White",
+      "to": "Standard Process",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Emma White",
+      "to": "Review Process",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Emma White",
+      "to": "Approval Process",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Monitoring Process",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Process 5",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Process 6",
+      "type": "OWNS",
+      "ownership_type": "primary",
+      "responsibility_level": "full"
+    }
+  ],
+  "uses_system": [
+    {
+      "from": "Emma White",
+      "to": "HubSpot",
+      "type": "USES",
+      "usage_frequency": "monthly",
+      "proficiency": "intermediate"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "HubSpot",
+      "type": "USES",
+      "usage_frequency": "monthly",
+      "proficiency": "beginner"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "HubSpot",
+      "type": "USES",
+      "usage_frequency": "monthly",
+      "proficiency": "beginner"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "HubSpot",
+      "type": "USES",
+      "usage_frequency": "daily",
+      "proficiency": "expert"
+    },
+    {
+      "from": "David Anderson",
+      "to": "HubSpot",
+      "type": "USES",
+      "usage_frequency": "daily",
+      "proficiency": "beginner"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "ServiceNow",
+      "type": "USES",
+      "usage_frequency": "weekly",
+      "proficiency": "beginner"
+    },
+    {
+      "from": "David Anderson",
+      "to": "ServiceNow",
+      "type": "USES",
+      "usage_frequency": "weekly",
+      "proficiency": "intermediate"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "ServiceNow",
+      "type": "USES",
+      "usage_frequency": "weekly",
+      "proficiency": "intermediate"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "ServiceNow",
+      "type": "USES",
+      "usage_frequency": "weekly",
+      "proficiency": "intermediate"
+    },
+    {
+      "from": "Emma White",
+      "to": "ServiceNow",
+      "type": "USES",
+      "usage_frequency": "weekly",
+      "proficiency": "intermediate"
+    },
+    {
+      "from": "Emma Roberts",
+      "to": "Microsoft Teams",
+      "type": "USES",
+      "usage_frequency": "monthly",
+      "proficiency": "intermediate"
+    },
+    {
+      "from": "Henry Garcia",
+      "to": "Microsoft Teams",
+      "type": "USES",
+      "usage_frequency": "daily",
+      "proficiency": "expert"
+    },
+    {
+      "from": "Nathan Harris",
+      "to": "Microsoft Teams",
+      "type": "USES",
+      "usage_frequency": "daily",
+      "proficiency": "beginner"
+    },
+    {
+      "from": "David Anderson",
+      "to": "Microsoft Teams",
+      "type": "USES",
+      "usage_frequency": "daily",
+      "proficiency": "intermediate"
+    }
+  ],
+  "process_belongs_to_project": [
+    {
+      "from": "Lead Qualification",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-05-25T21:29:57.733624"
+    },
+    {
+      "from": "Lead Qualification",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-05-25T21:29:57.733624"
+    },
+    {
+      "from": "Demo Scheduling",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-06-11T21:29:57.733636"
+    },
+    {
+      "from": "Demo Scheduling",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-06-11T21:29:57.733636"
+    },
+    {
+      "from": "Contract Negotiation",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-10-16T21:29:57.733644"
+    },
+    {
+      "from": "Contract Negotiation",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-10-16T21:29:57.733644"
+    },
+    {
+      "from": "Deal Review",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-04-08T21:29:57.733652"
+    },
+    {
+      "from": "Deal Review",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-04-08T21:29:57.733652"
+    },
+    {
+      "from": "Pipeline Management",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-03-07T21:29:57.733659"
+    },
+    {
+      "from": "Pipeline Management",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-03-07T21:29:57.733659"
+    },
+    {
+      "from": "Customer Outreach",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-03-08T21:29:57.733667"
+    },
+    {
+      "from": "Customer Outreach",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-03-08T21:29:57.733667"
+    },
+    {
+      "from": "Process 7",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-09-02T21:29:57.733674"
+    },
+    {
+      "from": "Process 7",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-09-02T21:29:57.733674"
+    },
+    {
+      "from": "Process 8",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-10-19T21:29:57.733681"
+    },
+    {
+      "from": "Process 8",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-10-19T21:29:57.733681"
+    },
+    {
+      "from": "Process 9",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-11-12T21:29:57.733689"
+    },
+    {
+      "from": "Process 9",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-11-12T21:29:57.733689"
+    },
+    {
+      "from": "Standard Process",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-09-06T21:29:57.733698"
+    },
+    {
+      "from": "Standard Process",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-09-06T21:29:57.733698"
+    },
+    {
+      "from": "Review Process",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-08-19T21:29:57.733705"
+    },
+    {
+      "from": "Review Process",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-08-19T21:29:57.733705"
+    },
+    {
+      "from": "Approval Process",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-01-15T21:29:57.733728"
+    },
+    {
+      "from": "Approval Process",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-01-15T21:29:57.733728"
+    },
+    {
+      "from": "Monitoring Process",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-06-23T21:29:57.733736"
+    },
+    {
+      "from": "Monitoring Process",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-06-23T21:29:57.733736"
+    },
+    {
+      "from": "Process 5",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-10-22T21:29:57.733743"
+    },
+    {
+      "from": "Process 5",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2024-10-22T21:29:57.733743"
+    },
+    {
+      "from": "Process 6",
+      "to": "Sales Process Optimization",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-03-20T21:29:57.733751"
+    },
+    {
+      "from": "Process 6",
+      "to": "Security Infrastructure Upgrade",
+      "type": "BELONGS_TO",
+      "relationship_type": "process_project",
+      "start_date": "2025-03-20T21:29:57.733751"
+    }
+  ]
+}
