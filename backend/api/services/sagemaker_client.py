@@ -207,53 +207,19 @@ def invoke_sagemaker(endpoint_name: str, region: str, prompt: str) -> str:
 
 
 def invoke_strategy_model(endpoint_name: str, region: str, prompt: str) -> dict:
-    """Use Bedrock Agent directly - skip SageMaker completely"""
+    """Always use Bedrock for strategy analysis"""
     try:
-        print(f"Using Bedrock Agent for strategy analysis")
+        print(f"Using Bedrock for strategy analysis")
         text = invoke_bedrock_fallback(prompt)
-        return {"text": text, "source": "bedrock-agent"}
+        return {"text": text, "source": "bedrock"}
     except Exception as bedrock_error:
-        print(f"Bedrock Agent failed: {bedrock_error}, using Claude fallback")
+        print(f"Bedrock failed: {bedrock_error}, trying Claude API")
         try:
             text = invoke_claude_fallback(prompt)
             return {"text": text, "source": "claude"}
         except Exception as claude_error:
-            print(f"All fallbacks failed: {claude_error}")
-            # Return a demo response to keep the system working
-            demo_response = f"""<strategic_analysis>
-Based on the organizational context provided, here are the key strategic insights:
-
-1. **Current State Analysis**: The organization shows a complex structure with multiple departments, processes, and projects interconnected through various relationships.
-
-2. **Key Challenges**: 
-   - Resource allocation across departments
-   - Process optimization opportunities
-   - Cross-functional collaboration gaps
-
-3. **Strategic Opportunities**:
-   - Leverage existing relationships for better coordination
-   - Streamline processes based on current project patterns
-   - Enhance inter-departmental communication
-</strategic_analysis>
-
-<action_plan>
-1. **Immediate Actions (0-30 days)**:
-   - Conduct stakeholder interviews to validate current challenges
-   - Map critical process dependencies
-   - Establish cross-functional working groups
-
-2. **Medium-term Initiatives (1-6 months)**:
-   - Implement process optimization based on findings
-   - Develop standardized communication protocols
-   - Create performance metrics for inter-departmental collaboration
-
-3. **Long-term Strategic Goals (6-12 months)**:
-   - Establish enterprise-wide process governance
-   - Implement advanced analytics for organizational insights
-   - Create continuous improvement framework
-</action_plan>
-
-*Note: This is a demo response as the AI model services are currently unavailable.*"""
-            return {"text": demo_response, "source": "demo"}
+            print(f"Claude API failed: {claude_error}")
+            # Return error instead of demo response
+            return {"text": "Sorry, I encountered an error connecting to AI services. Please try again.", "source": "error"}
 
 
