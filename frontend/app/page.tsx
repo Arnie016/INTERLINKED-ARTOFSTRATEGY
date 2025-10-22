@@ -54,7 +54,7 @@ export default function HomePage() {
   const checkConnection = async () => {
     try {
       console.log('Attempting to connect to backend...')
-      const response = await fetch('http://localhost:8000/api/health', {
+      const response = await fetch('/api/health', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -75,7 +75,7 @@ export default function HomePage() {
   const loadInitialGraphData = async () => {
     try {
       console.log('Loading initial graph data from Neo4j...')
-      const response = await fetch('http://localhost:8000/api/graph', {
+      const response = await fetch('/api/graph-context', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -132,7 +132,7 @@ export default function HomePage() {
       console.log('Generating sample data for company:', companyName)
       
       // Call the backend to generate comprehensive sample data
-      const response = await fetch('http://localhost:8000/api/generate-sample-data', {
+      const response = await fetch('/api/generate-sample-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

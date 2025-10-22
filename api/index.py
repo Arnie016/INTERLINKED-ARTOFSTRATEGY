@@ -108,12 +108,19 @@ def strategy(request: StrategyRequest) -> Dict[str, Any]:
     except Exception as e:
         return {"error": str(e), "text": "Sorry, I encountered an error. Please try again."}
 
-@app.post("/api/enhance")
-def enhance_query(request: Dict[str, str]) -> Dict[str, str]:
-    """Enhance query for better results"""
+@app.post("/api/generate-sample-data")
+def generate_sample_data(request: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate sample organizational data"""
     try:
-        query = request.get("query", "")
-        enhanced = enhance_query_with_claude(query)
-        return {"enhanced_query": enhanced}
+        company_name = request.get("company_name", "Demo Company")
+        company_size = request.get("company_size", "medium")
+        
+        # For now, return a success message since we already have demo data
+        return {
+            "success": True,
+            "message": f"Sample data already available for {company_name}",
+            "company_name": company_name,
+            "company_size": company_size
+        }
     except Exception as e:
-        return {"error": str(e), "enhanced_query": query}
+        return {"error": str(e), "success": False}
