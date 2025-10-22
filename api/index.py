@@ -30,7 +30,7 @@ from backend.api.prompting.strategy_prompt import build_prompt
 class StrategyRequest(BaseModel):
     query: str
     useExa: Optional[bool] = False
-    maxNodes: Optional[bool] = 25
+    maxNodes: Optional[int] = 25
     enhance: Optional[bool] = False
     deepSearch: Optional[bool] = False
 
